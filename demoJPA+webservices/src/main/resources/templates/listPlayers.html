@@ -16,12 +16,12 @@
             <th>CHANGE</th>
             <th>TEAM</th>
           </tr>
-          <tr th:each="s : ${players}">
+          <tr align="center" th:each="s : ${players}">
             <td th:text="${s.id}">id</td>
             <td th:text="${s.name}">name</td>
             <td th:text="${s.position}">position</td>
             <td th:text="${s.birthday}">birthday</td>
-            <td><a th:href="@{editStudent(id=${s.id})}">here</a></td>
+            <td><a th:href="@{editPlayer(id=${s.id})}">here</a></td>
             <td th:text="${s.team}">team</td>
           </tr>
         </table>

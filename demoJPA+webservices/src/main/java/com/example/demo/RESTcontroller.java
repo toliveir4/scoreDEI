@@ -30,7 +30,7 @@ public class RESTcontroller {
     @GetMapping(value = "professors", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Team> getProfessors()
     {
-        return profService.getAllProfessors();
+        return profService.getAllTeams();
     }
 
     @GetMapping(value = "students", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -56,8 +56,8 @@ public class RESTcontroller {
     }
 
     @PostMapping(value = "professors", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void addProfessor(@RequestBody Team p) {
-        profService.addProfessor(p);
+    public void addTeam(@RequestBody Team t) {
+        profService.addTeam(t);
     }
 
     @PostMapping(value = "students", consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -66,12 +66,12 @@ public class RESTcontroller {
     }
 
     @PutMapping(value = "professors/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public void addProfessor(@PathVariable("id") int id, @RequestBody Team p) {
+    public void addTeam(@PathVariable("id") int id, @RequestBody Team t) {
         Optional<Team> op = profService.getProfessor(id);
         if (!op.isEmpty()) {
-            Team p1 = op.get();
-            p1.setName(p.getName());
-            profService.addProfessor(p1);
+            Team t1 = op.get();
+            t1.setName(t.getName());
+            profService.addTeam(t1);
         }
     }
 

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class DataController {
     @Autowired
-    TeamService profService;
+    TeamService teamService;
 
     @Autowired
     PlayerService playerService;
@@ -42,12 +42,12 @@ public class DataController {
                 new Team("Sporting")
         };
         Player[] myPlayers = {
-                new Player("Darwin", "LW", "19-10-1997"),
-                new Player("Taarabt", "CM", "19-10-1997"),
-                new Player("Cristiano Ronaldo", "ST", "19-10-1997"),
-                new Player("Pepe", "CB", "19-10-1997"),
-                new Player("Ruben Dias", "CB", "19-10-1997"),
-                new Player("Palhinha", "MC", "19-10-1997")
+                new Player("Darwin", "CF", "24-6-1999"),
+                new Player("Taarabt", "CM", "24-3-1989"),
+                new Player("Cristiano Ronaldo", "CF", "5-2-1985"),
+                new Player("Pepe", "CB", "26-2-1983"),
+                new Player("Ruben Dias", "CB", "14-5-1997"),
+                new Player("Palhinha", "CDM", "9-7-1995")
         };
 
         myPlayers[0].setTeam(myTeams[0]);
@@ -73,49 +73,49 @@ public class DataController {
         return "listPlayers";
     }
 
-    @GetMapping("/createStudent")
-    public String createStudent(Model m) {
-        m.addAttribute("student", new Player());
-        m.addAttribute("allProfessors", this.profService.getAllProfessors());
-        return "editStudent";
+    @GetMapping("/createPlayer")
+    public String createPlayer(Model m) {
+        m.addAttribute("player", new Player());
+        m.addAttribute("allProfessors", this.teamService.getAllTeams());
+        return "editPlayer";
     }
 
-    @GetMapping("/editStudent")
-    public String editStudent(@RequestParam(name="id", required=true) int id, Model m) {
+    @GetMapping("/editPlayer")
+    public String editPlayer(@RequestParam(name="id", required=true) int id, Model m) {
         Optional<Player> op = this.playerService.getPlayer(id);
         if (op.isPresent()) {
-            m.addAttribute("student", op.get());
-            m.addAttribute("allProfessors", this.profService.getAllProfessors());
-            return "editStudent";
+            m.addAttribute("player", op.get());
+            m.addAttribute("allTeams", this.teamService.getAllTeams());
+            return "editPlayer";
         }
         else {
             return "redirect:/listPlayers";
         }
     }    
 
-    @PostMapping("/saveStudent")
-    public String saveStudent(@ModelAttribute Player st) {
+    @PostMapping("/savePlayer")
+    public String savePlayer(@ModelAttribute Player st) {
         this.playerService.addPlayer(st);
         return "redirect:/listPlayers";
     }
 
-    @GetMapping("/queryStudents")
+    @GetMapping("/queryPlayers")
     public String queryStudent1(Model m) {
         m.addAttribute("person", new FormData());
-        return "queryStudents";
+        return "queryPlayers";
     }
 
     /* Note the invocation of a service method that is served by a query in jpql */
     @GetMapping("/queryResults")
     public String queryResult1(@ModelAttribute FormData data, Model m) {
         List<Player> ls = this.playerService.findByNameEndsWith(data.getName());
-        m.addAttribute("students", ls);
+        m.addAttribute("players", ls);
         return "listPlayers";
     }
 
     @GetMapping("/listProfessors")
     public String listProfs(Model model) {
-        model.addAttribute("professors", this.profService.getAllProfessors());
+        model.addAttribute("professors", this.teamService.getAllTeams());
         return "listProfessors";
     }
 
@@ -126,7 +126,7 @@ public class DataController {
     }
 
     private String getEditProfessorForm(int id, String formName, Model m) {
-        Optional<Team> op = this.profService.getProfessor(id);
+        Optional<Team> op = this.teamService.getProfessor(id);
         if (op.isPresent()) {
             m.addAttribute("professor", op.get());
             return formName;
@@ -140,8 +140,8 @@ public class DataController {
     }    
 
     @PostMapping("/saveProfessor")
-    public String saveProfessor(@ModelAttribute Team prof) {
-        this.profService.addProfessor(prof);
+    public String saveProfessor(@ModelAttribute Team t) {
+        this.teamService.addTeam(t);
         return "redirect:/listProfessors";
     }
 

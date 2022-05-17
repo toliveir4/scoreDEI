@@ -1,0 +1,27 @@
+<form th:action="@{/savePlayer}" th:object="${player}" method="post">
+    <div="form-row">
+        <div>
+            <input type="hidden" th:field="*{id}">
+        </div>
+        <div>
+            <label>Name</label>
+            <input type="text" th:field="*{name}">
+        </div>
+        <div>
+            <label>Position</label>
+            <input type="text" th:field="*{position}">
+        </div>
+        <div>
+            <label>Birthday</label>
+            <input type="text" th:field="*{birthday}">
+        </div>
+        <div>
+            <select id="teams" th:field="*{team}">
+                <option th:each="team : ${allTeams}" th:value="${{team.id}}" th:text="${team.name}">
+                    The name
+                </option>
+            </select>
+        </div>
+        <button type="submit">Edit/Create Student</button>
+        </div>
+</form>

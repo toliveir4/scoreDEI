@@ -55,8 +55,8 @@ public class Player {
         return position;
     }
     
-    @XmlElementWrapper(name = "professors")
-    @XmlElement(name = "prof")
+    @XmlElementWrapper(name = "teams")
+    @XmlElement(name = "team")
     public Team getTeam() {
         return team;
     }
