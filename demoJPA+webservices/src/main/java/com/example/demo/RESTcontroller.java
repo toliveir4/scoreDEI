@@ -54,7 +54,7 @@ public class RESTcontroller {
         return op.get();
     }*/
 
-    @PostMapping(value = "professors", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "players", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void setTeam(@RequestBody Team t) {
         playerService.setTeam(t);
     }
@@ -64,7 +64,7 @@ public class RESTcontroller {
         teamService.addPlayer(p);
     }
 
-   /* @PutMapping(value = "professors/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+   /* @PutMapping(value = "players/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public void setTeam(@PathVariable("id") int id, @RequestBody Team p) {
         Optional<Team> op = playerService.getTeam2(id);
         if (!op.isEmpty()) {

@@ -12,24 +12,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class TeamService {
     @Autowired
-    private PlayerRepository studentRepository;
+    private PlayerRepository playerRepository;
 
     public List<Player> getAllPlayers() {
         List<Player> userRecords = new ArrayList<>();
-        studentRepository.findAll().forEach(userRecords::add);
+        playerRepository.findAll().forEach(userRecords::add);
         return userRecords;
     }
 
     public void addPlayer(Player student) {
-        studentRepository.save(student);
+        playerRepository.save(student);
     }
 
     public Optional<Player> getPlayer(int id) {
-        return studentRepository.findById(id);
+        return playerRepository.findById(id);
     }
 
     public List<Player> findByNameEndsWith(String chars) {
-        return studentRepository.findByNameEndsWith(chars);
+        return playerRepository.findByNameEndsWith(chars);
     }
 
 }

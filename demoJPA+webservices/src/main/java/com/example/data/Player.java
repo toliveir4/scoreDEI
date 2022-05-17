@@ -26,7 +26,7 @@ public class Player {
         this.name = name;
         this.position = position;
         this.age = age;
-        this.team = new Team();
+        //this.team = new Team();//Talvez seja desnecessario
     }
     
     public int getId() {
