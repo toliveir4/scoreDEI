@@ -19,6 +19,7 @@ public class Team {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+    //private File img;
     @OneToMany(mappedBy="team")
     private List<Player> players;
 
@@ -48,7 +49,7 @@ public class Team {
         return this.name + " (id = " + this.id + ").";
     }
 
-    public List<Player> getPlayers() {
+    public List<Player> getStudents() {
         return this.players;
     }
 }

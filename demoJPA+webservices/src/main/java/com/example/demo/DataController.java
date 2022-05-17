@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class DataController {
     @Autowired
-    PlayerService playerService;
+    TeamService profService;
 
     @Autowired
-    TeamService teamService;
+    PlayerService playerService;
 
     @GetMapping("/")
     public String redirect() {
-        return "redirect:/listTeamPlayers";
+        return "redirect:/listPlayers";
     }
 
     @GetMapping("/createData")
@@ -36,18 +36,18 @@ public class DataController {
 
 	@PostMapping("/saveData")
 	public String saveData(Model model) {
-        Team[] myTeams = { 
-            new Team("Benfica"), 
-            new Team("Porto"), 
-            new Team("Sporting")
+        Team[] myTeams = {
+                new Team("Benfica"),
+                new Team("Porto"),
+                new Team("Sporting")
         };
-        Player[] myPlayers = { 
-            new Player("Darwin", "LW", 23),
-            new Player("Taarabt", "CM", 32),
-            new Player("Cristiano Ronaldo", "ST", 37),
-            new Player("Pepe", "CB", 39),
-            new Player("Ruben Dias", "CB", 24),
-            new Player("Palhinha", "MC", 26)
+        Player[] myPlayers = {
+                new Player("Darwin", "LW", "19-10-1997"),
+                new Player("Taarabt", "CM", "19-10-1997"),
+                new Player("Cristiano Ronaldo", "ST", "19-10-1997"),
+                new Player("Pepe", "CB", "19-10-1997"),
+                new Player("Ruben Dias", "CB", "19-10-1997"),
+                new Player("Palhinha", "MC", "19-10-1997")
         };
 
         myPlayers[0].setTeam(myTeams[0]);
@@ -61,88 +61,88 @@ public class DataController {
         myPlayers[5].setTeam(myTeams[1]);
         myPlayers[5].setTeam(myTeams[2]);
 
-        for (Player s : myPlayers)
-            this.teamService.addPlayer(s);
+        for (Player p : myPlayers)
+            this.playerService.addPlayer(p);
     
-		return "redirect:/listTeamPlayers";
+		return "redirect:/listPlayers";
 	}
 
-    @GetMapping("/listTeamPlayers")
-    public String listTeamPlayers(Model model) {
-        model.addAttribute("players", this.teamService.getAllPlayers());
-        return "listTeamPlayers";
+    @GetMapping("/listPlayers")
+    public String listPlayers(Model model) {
+        model.addAttribute("players", this.playerService.getAllPlayers());
+        return "listPlayers";
     }
 
-    @GetMapping("/createPlayer")
-    public String createPlayer(Model m) {
-        m.addAttribute("player", new Player());
-        m.addAttribute("allPlayers", this.playerService.getTeam());
-        return "editPlayer";
+    @GetMapping("/createStudent")
+    public String createStudent(Model m) {
+        m.addAttribute("student", new Player());
+        m.addAttribute("allProfessors", this.profService.getAllProfessors());
+        return "editStudent";
     }
 
-    @GetMapping("/editPlayer")
-    public String editPlayer(@RequestParam(name="id", required=true) int id, Model m) {
-        Optional<Player> op = this.teamService.getPlayer(id);
+    @GetMapping("/editStudent")
+    public String editStudent(@RequestParam(name="id", required=true) int id, Model m) {
+        Optional<Player> op = this.playerService.getPlayer(id);
         if (op.isPresent()) {
-            m.addAttribute("player", op.get());
-            m.addAttribute("allPlayers", this.playerService.getTeam());
-            return "editPlayer";
+            m.addAttribute("student", op.get());
+            m.addAttribute("allProfessors", this.profService.getAllProfessors());
+            return "editStudent";
         }
         else {
-            return "redirect:/listTeamPlayers";
+            return "redirect:/listPlayers";
         }
     }    
 
-    @PostMapping("/savePlayer")
-    public String saveplayer(@ModelAttribute Player p) {
-        this.teamService.addPlayer(p);
-        return "redirect:/listTeamPlayers";
+    @PostMapping("/saveStudent")
+    public String saveStudent(@ModelAttribute Player st) {
+        this.playerService.addPlayer(st);
+        return "redirect:/listPlayers";
     }
 
-    @GetMapping("/queryPlayers")
-    public String queryPlayer1(Model m) {
+    @GetMapping("/queryStudents")
+    public String queryStudent1(Model m) {
         m.addAttribute("person", new FormData());
-        return "queryPlayers";
+        return "queryStudents";
     }
 
     /* Note the invocation of a service method that is served by a query in jpql */
     @GetMapping("/queryResults")
     public String queryResult1(@ModelAttribute FormData data, Model m) {
-        List<Player> ls = this.teamService.findByNameEndsWith(data.getName());
-        m.addAttribute("players", ls);
-        return "listTeamPlayers";
+        List<Player> ls = this.playerService.findByNameEndsWith(data.getName());
+        m.addAttribute("students", ls);
+        return "listPlayers";
     }
 
-    /*@GetMapping("/listTeams")
+    @GetMapping("/listProfessors")
     public String listProfs(Model model) {
-        model.addAttribute("team", this.playerService.getTeam());
-        return "listTeams";
-    }*/
-
-    @GetMapping("/createTeam")
-    public String createTeam(Model m) {
-        m.addAttribute("team", new Team());
-        return "editTeam";
+        model.addAttribute("professors", this.profService.getAllProfessors());
+        return "listProfessors";
     }
 
-    /*private String getEditTeamForm(String formName, Model m) {
-        Team op = this.playerService.getTeam();
-        if (op != NULL) {
-            m.addAttribute("team", op);
+    @GetMapping("/createProfessor")
+    public String createProfessor(Model m) {
+        m.addAttribute("professor", new Team());
+        return "editProfessor";
+    }
+
+    private String getEditProfessorForm(int id, String formName, Model m) {
+        Optional<Team> op = this.profService.getProfessor(id);
+        if (op.isPresent()) {
+            m.addAttribute("professor", op.get());
             return formName;
         }
-        return "redirect:/listTeams";
+        return "redirect:/listProfessors";
     }
 
-    @GetMapping("/editTeam")
-    public String editTeam(@RequestParam(name="id", required=true) int id, Model m) {
-        return getEditTeamForm("editTeam", m);
-    }*/ 
+    @GetMapping("/editProfessor")
+    public String editProfessor(@RequestParam(name="id", required=true) int id, Model m) {
+        return getEditProfessorForm(id, "editProfessor", m);
+    }    
 
-    @PostMapping("/saveTeam")
-    public String saveTeam(@ModelAttribute Team team) {
-        this.playerService.setTeam(team);
-        return "redirect:/listTeams";
+    @PostMapping("/saveProfessor")
+    public String saveProfessor(@ModelAttribute Team prof) {
+        this.profService.addProfessor(prof);
+        return "redirect:/listProfessors";
     }
 
 }

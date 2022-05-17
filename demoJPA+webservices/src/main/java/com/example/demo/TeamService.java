@@ -1,35 +1,37 @@
 package com.example.demo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.data.Player;
+import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.ArrayList;    
+import org.springframework.beans.factory.annotation.Autowired;    
 import org.springframework.stereotype.Service;
 
-@Service
-public class TeamService {
-    @Autowired
-    private PlayerRepository playerRepository;
+import com.example.data.Team;
 
-    public List<Player> getAllPlayers() {
-        List<Player> userRecords = new ArrayList<>();
-        playerRepository.findAll().forEach(userRecords::add);
-        return userRecords;
+@Service    
+public class TeamService   
+{    
+    @Autowired    
+    private TeamRepository profRepository;
+
+    public List<Team> getAllProfessors()  
+    {    
+        List<Team>userRecords = new ArrayList<>();    
+        profRepository.findAll().forEach(userRecords::add);    
+        return userRecords;    
     }
 
-    public void addPlayer(Player student) {
-        playerRepository.save(student);
+    public void addProfessor(Team prof)  
+    {
+        System.out.println(prof);
+        profRepository.save(prof);    
     }
 
-    public Optional<Player> getPlayer(int id) {
-        return playerRepository.findById(id);
+    public Optional<Team> getProfessor(int id) {
+        return profRepository.findById(id);
     }
 
-    public List<Player> findByNameEndsWith(String chars) {
-        return playerRepository.findByNameEndsWith(chars);
-    }
-
-}
+}    

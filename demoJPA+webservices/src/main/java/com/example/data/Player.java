@@ -1,5 +1,11 @@
 package com.example.data;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,24 +15,32 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import java.util.Date;
+
 @Entity
 @XmlRootElement
 public class Player {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name, position;
-    private int age;
-    @ManyToOne
+    private Date birthday;
+    @ManyToOne(cascade = CascadeType.ALL)
     private Team team;
     
     public Player() {
     }
     
-    public Player(String name, String position, int age) {
+    public Player(String name, String position, String birthday) {
         this.name = name;
         this.position = position;
-        this.age = age;
-        //this.team = new Team();//Talvez seja desnecessario
+        SimpleDateFormat dt = new SimpleDateFormat("dd-mm-yyyy");
+        Date date;
+        try {
+            date = dt.parse(birthday);
+            this.birthday = date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
     
     public int getId() {
@@ -41,8 +55,8 @@ public class Player {
         return position;
     }
     
-    @XmlElementWrapper(name = "teams")
-    @XmlElement(name = "team")
+    @XmlElementWrapper(name = "professors")
+    @XmlElement(name = "prof")
     public Team getTeam() {
         return team;
     }
@@ -51,12 +65,25 @@ public class Player {
         this.team = team;
     }
 
-    public int getAge() {
-        return age;
+    public void addProf(Team prof) {
+        //this.team.add(prof);
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    //TODO verificar se a data e valida (?)
+    public String getBirthday() {
+        SimpleDateFormat d = new SimpleDateFormat("dd-mm-yyyy");
+        return d.format(birthday);
+    }
+
+    public void setBirthday(String birthday) {
+        SimpleDateFormat dt = new SimpleDateFormat("dd-mm-yyyy");
+        Date date;
+        try {
+            date = dt.parse(birthday);
+            this.birthday = date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getName() {
@@ -72,6 +99,6 @@ public class Player {
     }
 
     public String toString() {
-        return this.name + "(id = " + this.id + "). Position: " + this.position + ". Age: " + this.age;
+        return this.name + "(id = " + this.id + "). position: " + this.position + ". birthday: " + getBirthday();
     }
 }

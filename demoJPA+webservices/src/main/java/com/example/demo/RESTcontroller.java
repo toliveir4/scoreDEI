@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,68 +22,69 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("rest")
 public class RESTcontroller {
     @Autowired
-    PlayerService playerService;
+    TeamService profService;
 
     @Autowired
-    TeamService teamService;
+    PlayerService playerService;
 
-    @GetMapping(value = "team", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Team getTeam()
+    @GetMapping(value = "professors", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Team> getProfessors()
     {
-        return playerService.getTeam();
+        return profService.getAllProfessors();
     }
 
-    @GetMapping(value = "players", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "students", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Player> getPlayers()
     {
-        return teamService.getAllPlayers();
+        return playerService.getAllPlayers();
     }
 
-    @GetMapping(value = "players/{id}", produces = {MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "students/{id}", produces = {MediaType.APPLICATION_XML_VALUE})
     public Player getPlayer(@PathVariable("id") int id) {
-        Optional<Player> op = teamService.getPlayer(id);
+        Optional<Player> op = playerService.getPlayer(id);
         if (op.isEmpty())
             return null;
         return op.get();
     }
 
-    /*@GetMapping(value = "team/{id}", produces = {MediaType.APPLICATION_XML_VALUE})
-    public Team getTeam2(@PathVariable("id") int id) {
-        Optional<Team> op = playerService.getTeam2(id);
+    @GetMapping(value = "professors/{id}", produces = {MediaType.APPLICATION_XML_VALUE})
+    public Team getProfessor(@PathVariable("id") int id) {
+        Optional<Team> op = profService.getProfessor(id);
         if (op.isEmpty())
             return null;
         return op.get();
-    }*/
-
-    @PostMapping(value = "players", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void setTeam(@RequestBody Team t) {
-        playerService.setTeam(t);
     }
 
-    @PostMapping(value = "players", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void addPlayer(@RequestBody Player p) {
-        teamService.addPlayer(p);
+    @PostMapping(value = "professors", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void addProfessor(@RequestBody Team p) {
+        profService.addProfessor(p);
     }
 
-   /* @PutMapping(value = "players/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public void setTeam(@PathVariable("id") int id, @RequestBody Team p) {
-        Optional<Team> op = playerService.getTeam2(id);
+    @PostMapping(value = "students", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void addPlayer(@RequestBody Player s) {
+        playerService.addPlayer(s);
+    }
+
+    @PutMapping(value = "professors/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public void addProfessor(@PathVariable("id") int id, @RequestBody Team p) {
+        Optional<Team> op = profService.getProfessor(id);
         if (!op.isEmpty()) {
             Team p1 = op.get();
             p1.setName(p.getName());
+            profService.addProfessor(p1);
         }
-    }*/
+    }
 
-    @PutMapping(value = "players/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PutMapping(value = "students/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public void addPlayer(@PathVariable("id") int id, @RequestBody Player s) {
         System.out.println("PUT called");
-        Optional<Player> op = teamService.getPlayer(id);
+        Optional<Player> op = playerService.getPlayer(id);
         if (!op.isEmpty()) {
             Player s1 = op.get();
             s1.setName(s.getName());
-            s1.setAge(s.getAge());
+            s1.setBirthday(s.getBirthday());
             s1.setPosition(s.getPosition());
-            teamService.addPlayer(op.get());
+            playerService.addPlayer(op.get());
         }
     }
 }
