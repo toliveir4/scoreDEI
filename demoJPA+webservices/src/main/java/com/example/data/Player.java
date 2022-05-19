@@ -22,6 +22,7 @@ import java.util.Date;
 public class Player {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    private int goals;
     private String name, position;
     private Date birthday;
     @ManyToOne(cascade = CascadeType.ALL)
