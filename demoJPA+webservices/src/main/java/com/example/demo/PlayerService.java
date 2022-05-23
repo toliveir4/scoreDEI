@@ -31,7 +31,6 @@ public class PlayerService
         return playerRepository.findById(id);
     }
 
-
     public List<Player> findByNameEndsWith(String chars) {
         return playerRepository.findByNameEndsWith(chars);
     }

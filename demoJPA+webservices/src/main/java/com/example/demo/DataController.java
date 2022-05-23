@@ -37,9 +37,9 @@ public class DataController {
 	@PostMapping("/saveData")
 	public String saveData(Model model) {
         Team[] myTeams = {
-                new Team("Benfica"),
-                new Team("Porto"),
-                new Team("Sporting")
+                new Team("Benfica", 34, 34, 0, 0),
+                new Team("Porto", 34, 0, 0, 35),
+                new Team("Sporting", 34, 0, 34, 0)
         };
         Player[] myPlayers = {
                 new Player("Darwin", "CF", "24-6-1999"),
@@ -113,36 +113,35 @@ public class DataController {
         return "listPlayers";
     }
 
-    @GetMapping("/listProfessors")
+    @GetMapping("/listTeams")
     public String listProfs(Model model) {
-        model.addAttribute("professors", this.teamService.getAllTeams());
-        return "listProfessors";
+        model.addAttribute("teams", this.teamService.getAllTeams());
+        return "listTeams";
     }
 
-    @GetMapping("/createProfessor")
+    @GetMapping("/createTeam")
     public String createProfessor(Model m) {
-        m.addAttribute("professor", new Team());
-        return "editProfessor";
+        m.addAttribute("team", new Team());
+        return "editTeam";
     }
 
-    private String getEditProfessorForm(int id, String formName, Model m) {
+    private String getEditTeamForm(int id, String formName, Model m) {
         Optional<Team> op = this.teamService.getProfessor(id);
         if (op.isPresent()) {
-            m.addAttribute("professor", op.get());
+            m.addAttribute("team", op.get());
             return formName;
         }
-        return "redirect:/listProfessors";
+        return "redirect:/listTeams";
     }
 
-    @GetMapping("/editProfessor")
-    public String editProfessor(@RequestParam(name="id", required=true) int id, Model m) {
-        return getEditProfessorForm(id, "editProfessor", m);
+    @GetMapping("/editTeam")
+    public String editTeam(@RequestParam(name="id", required=true) int id, Model m) {
+        return getEditTeamForm(id, "editTeam", m);
     }    
 
-    @PostMapping("/saveProfessor")
-    public String saveProfessor(@ModelAttribute Team t) {
+    @PostMapping("/saveTeam")
+    public String saveTeam(@ModelAttribute Team t) {
         this.teamService.addTeam(t);
-        return "redirect:/listProfessors";
+        return "redirect:/listTeams";
     }
-
 }
