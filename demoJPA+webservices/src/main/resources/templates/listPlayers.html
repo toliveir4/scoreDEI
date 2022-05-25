@@ -12,6 +12,7 @@
             <th>ID</th>
             <th>NAME</th>
             <th>POSITION</th>
+            <th>GOALS</th>
             <th>BIRTHDAY</th> 
             <th>CHANGE</th>
             <th>TEAM</th>
@@ -20,6 +21,7 @@
             <td th:text="${s.id}">id</td>
             <td th:text="${s.name}">name</td>
             <td th:text="${s.position}">position</td>
+            <td th:text="${s.goals}">goals</td>
             <td th:text="${s.birthday}">birthday</td>
             <td><a th:href="@{editPlayer(id=${s.id})}">here</a></td>
             <td th:text="${s.team}">team</td>

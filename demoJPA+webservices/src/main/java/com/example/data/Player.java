@@ -2,8 +2,6 @@ package com.example.data;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,6 +15,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @XmlRootElement
@@ -33,10 +32,6 @@ public class Player {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Event> events;
 
-
-   
-
-    
     public Player() {
     }
     
@@ -106,6 +101,14 @@ public class Player {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public int getGoals() {
+        return goals;
+    }
+
+    public void setGoals(int goals) {
+        this.goals = goals;
     }
 
     public String toString() {

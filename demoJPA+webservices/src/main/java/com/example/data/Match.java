@@ -13,47 +13,49 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
+
 @Entity
 @XmlRootElement
 public class Match {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String resultado, name;
     private Date date;
-    private int status; 
-    private int scoreA,scoreB;
-    //private List<Event> events;
-    
+    private int status;
+    private int scoreA, scoreB;
+    // private List<Event> events;
+
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Team> teams;
-  
+
     public Match() {
     }
-    
+
     public Match(String name, String resultado, int age) {
         this.name = name;
         this.resultado = resultado;
         this.teams = new ArrayList<>();
     }
-    
+
     public int getId() {
         return this.id;
     }
-    
+
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public String getResultado() {
         return resultado;
     }
-    
-    @XmlElementWrapper(name = "teamessors")
+
+    @XmlElementWrapper(name = "teams")
     @XmlElement(name = "team")
     public List<Team> getteams() {
         return teams;
     }
-    
+
     public void setteams(List<Team> teams) {
         this.teams = teams;
     }
@@ -75,7 +77,6 @@ public class Match {
     }
 
     public String toString() {
-        return this.name + "(id = " + this.id + "). Telephone: " + this.resultado ;
+        return this.name + "(id = " + this.id + "). Telephone: " + this.resultado;
     }
 }
-
