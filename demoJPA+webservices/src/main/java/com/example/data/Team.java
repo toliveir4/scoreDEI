@@ -2,6 +2,7 @@ package com.example.data;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,17 +21,18 @@ public class Team {
     private int id;
     private String name;
     //private File img;
-
-    @OneToMany
-    private List<Event> events;
-
-    @OneToMany(mappedBy="team")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Player> players;
+    private int wins, draws, defeats, games;
 
     public Team() {}
 
-    public Team(String name) {
+    public Team(String name, int games, int wins, int draws, int defeats) {
         this.name = name;
+        this.games = games;
+        this.wins = wins;
+        this.draws = draws;
+        this.defeats = defeats;
     }
 
     public int getId() {
@@ -47,6 +49,38 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getGames() {
+        return games;
+    }
+
+    public void setGames(int games) {
+        this.games = games;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
+    public int getDraws() {
+        return draws;
+    }
+
+    public void setDraws(int draws) {
+        this.draws = draws;
+    }
+
+    public int getDefeats() {
+        return defeats;
+    }
+
+    public void setDefeats(int defeats) {
+        this.defeats = defeats;
     }
 
     public String toString() {
