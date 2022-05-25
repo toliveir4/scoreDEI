@@ -34,21 +34,21 @@ public class DataController {
         return "createData";
     }
 
-	@PostMapping("/saveData")
 	public String saveData(Model model) {
         Team[] myTeams = {
                 new Team("Benfica", 34, 34, 0, 0),
                 new Team("Porto", 34, 0, 0, 35),
                 new Team("Sporting", 34, 0, 34, 0)
         };
+        
         Player[] myPlayers = {
-                new Player("Darwin", "CF", "24-6-1999"),
+                new Player("Darwin","CF", "24-6-1999"),
                 new Player("Taarabt", "CM", "24-3-1989"),
                 new Player("Cristiano Ronaldo", "CF", "5-2-1985"),
                 new Player("Pepe", "CB", "26-2-1983"),
                 new Player("Ruben Dias", "CB", "14-5-1997"),
                 new Player("Palhinha", "CDM", "9-7-1995")
-        };
+            };
 
         myPlayers[0].setTeam(myTeams[0]);
         myPlayers[0].setTeam(myTeams[1]);
@@ -113,35 +113,36 @@ public class DataController {
         return "listPlayers";
     }
 
-    @GetMapping("/listTeams")
+    @GetMapping("/listProfessors")
     public String listProfs(Model model) {
-        model.addAttribute("teams", this.teamService.getAllTeams());
-        return "listTeams";
+        model.addAttribute("professors", this.teamService.getAllTeams());
+        return "listProfessors";
     }
 
-    @GetMapping("/createTeam")
+    @GetMapping("/createProfessor")
     public String createProfessor(Model m) {
-        m.addAttribute("team", new Team());
-        return "editTeam";
+        m.addAttribute("professor", new Team());
+        return "editProfessor";
     }
 
-    private String getEditTeamForm(int id, String formName, Model m) {
-        Optional<Team> op = this.teamService.getProfessor(id);
+    private String getEditProfessorForm(int id, String formName, Model m) {
+        Optional<Team> op = this.teamService.getTeam(id);
         if (op.isPresent()) {
-            m.addAttribute("team", op.get());
+            m.addAttribute("professor", op.get());
             return formName;
         }
-        return "redirect:/listTeams";
+        return "redirect:/listProfessors";
     }
 
-    @GetMapping("/editTeam")
-    public String editTeam(@RequestParam(name="id", required=true) int id, Model m) {
-        return getEditTeamForm(id, "editTeam", m);
+    @GetMapping("/editProfessor")
+    public String editProfessor(@RequestParam(name="id", required=true) int id, Model m) {
+        return getEditProfessorForm(id, "editProfessor", m);
     }    
 
-    @PostMapping("/saveTeam")
-    public String saveTeam(@ModelAttribute Team t) {
+    @PostMapping("/saveProfessor")
+    public String saveProfessor(@ModelAttribute Team t) {
         this.teamService.addTeam(t);
-        return "redirect:/listTeams";
+        return "redirect:/listProfessors";
     }
+
 }
