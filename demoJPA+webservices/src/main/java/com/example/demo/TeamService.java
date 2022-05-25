@@ -27,7 +27,7 @@ public class TeamService {
         teamRepository.save(t);
     }
 
-    public Optional<Team> getProfessor(int id) {
+    public Optional<Team> getTeam(int id) {
         return teamRepository.findById(id);
     }
 

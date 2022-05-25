@@ -24,6 +24,9 @@ public class DataController {
     @Autowired
     PlayerService playerService;
 
+    @Autowired
+    WebUserService userService;
+
     @GetMapping("/")
     public String redirect() {
         return "redirect:/listPlayers";
@@ -126,7 +129,7 @@ public class DataController {
     }
 
     private String getEditProfessorForm(int id, String formName, Model m) {
-        Optional<Team> op = this.teamService.getProfessor(id);
+        Optional<Team> op = this.teamService.getTeam(id);
         if (op.isPresent()) {
             m.addAttribute("professor", op.get());
             return formName;

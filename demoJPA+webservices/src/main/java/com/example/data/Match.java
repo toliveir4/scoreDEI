@@ -12,26 +12,27 @@ import javax.persistence.ManyToMany;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-
+import java.util.Date;
 @Entity
 @XmlRootElement
 public class Match {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String resultado, name;
-    private int age;
     private Date date;
-    private int resultadoA,resultadoB;
+    private int status; 
+    private int scoreA,scoreB;
+    //private List<Event> events;
+    
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Team> teams;
-    
+  
     public Match() {
     }
     
-    public Match(String name, String telephone, int age) {
+    public Match(String name, String resultado, int age) {
         this.name = name;
-        this.resultado = telephone;
-        this.age = age;
+        this.resultado = resultado;
         this.teams = new ArrayList<>();
     }
     
@@ -61,14 +62,6 @@ public class Match {
         this.teams.add(team);
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
     public String getName() {
         return name;
     }
@@ -82,6 +75,6 @@ public class Match {
     }
 
     public String toString() {
-        return this.name + "(id = " + this.id + "). Telephone: " + this.resultado + ". Age: " + this.age;
+        return this.name + "(id = " + this.id + "). Telephone: " + this.resultado ;
     }
 }

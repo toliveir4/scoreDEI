@@ -49,7 +49,7 @@ public class RESTcontroller {
 
     @GetMapping(value = "professors/{id}", produces = {MediaType.APPLICATION_XML_VALUE})
     public Team getProfessor(@PathVariable("id") int id) {
-        Optional<Team> op = profService.getProfessor(id);
+        Optional<Team> op = profService.getTeam(id);
         if (op.isEmpty())
             return null;
         return op.get();
@@ -67,7 +67,7 @@ public class RESTcontroller {
 
     @PutMapping(value = "professors/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public void addTeam(@PathVariable("id") int id, @RequestBody Team t) {
-        Optional<Team> op = profService.getProfessor(id);
+        Optional<Team> op = profService.getTeam(id);
         if (!op.isEmpty()) {
             Team t1 = op.get();
             t1.setName(t.getName());

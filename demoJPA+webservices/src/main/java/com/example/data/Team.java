@@ -20,6 +20,10 @@ public class Team {
     private int id;
     private String name;
     //private File img;
+
+    @OneToMany
+    private List<Event> events;
+
     @OneToMany(mappedBy="team")
     private List<Player> players;
 

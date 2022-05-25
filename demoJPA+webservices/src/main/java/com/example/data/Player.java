@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,8 +26,16 @@ public class Player {
     private int goals;
     private String name, position;
     private Date birthday;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Team team;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Event> events;
+
+
+   
+
     
     public Player() {
     }
