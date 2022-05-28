@@ -5,8 +5,11 @@ import java.util.Optional;
 
 import com.example.data.Team;
 import com.example.data.Player;
+import com.example.data.WebUser;
 import com.example.formdata.FormData;
-
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,19 +17,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.example.demo.WebUserService;
 
 
 @Controller
 public class DataController {
+
     @Autowired
     TeamService teamService;
 
     @Autowired
     PlayerService playerService;
 
+    @Autowired
+    WebUserService userService;
+
     @GetMapping("/")
     public String redirect() {
-        return "redirect:/listPlayers";
+        return "redirect:/home";
     }
 
     @GetMapping("/createData")
@@ -41,6 +49,21 @@ public class DataController {
                 new Team("Porto", 34, 0, 0, 35),
                 new Team("Sporting", 34, 0, 34, 0)
         };
+
+        WebUser[] users = {
+           
+            new WebUser("user","pass"),
+            new WebUser("tmatos","adeus"),
+            new WebUser("user1","pass1"),
+            new WebUser("user2","pass2"),
+            new WebUser("user3","pass3"),
+        };
+
+        for (WebUser u : users)
+            this.userService.addUser(u);
+
+
+
         
         Player[] myPlayers = {
                 new Player("Darwin","CF", "24-6-1999"),
@@ -50,6 +73,7 @@ public class DataController {
                 new Player("Ruben Dias", "CB", "14-5-1997"),
                 new Player("Palhinha", "CDM", "9-7-1995")
             };
+
 
         myPlayers[0].setTeam(myTeams[0]);
         myPlayers[0].setTeam(myTeams[1]);
@@ -145,5 +169,5 @@ public class DataController {
         this.teamService.addTeam(t);
         return "redirect:/listTeams";
     }
-
+    
 }

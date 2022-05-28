@@ -39,8 +39,9 @@ public class WebUser {
     public WebUser() {
     }
     
-    public WebUser(String name) {
+    public WebUser(String name,String password) {
         this.name = name;
+        this.password = password;
     }
     
     public int getId() {

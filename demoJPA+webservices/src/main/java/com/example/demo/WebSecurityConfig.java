@@ -1,4 +1,4 @@
-package com.example.securingweb;
+package com.example.demo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import java.util.ArrayList;
 
 @Configuration
 @EnableWebSecurity
@@ -31,13 +33,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	@Override
 	public UserDetailsService userDetailsService() {
-		UserDetails user =
-			 User.withDefaultPasswordEncoder()
-				.username("user")
-				.password("password")
-				.roles("USER")
-				.build();
 
-		return new InMemoryUserDetailsManager(user);
+		WebUserService userService=new WebUserService();
+		//userService.getAllUsers();
+		ArrayList<UserDetails> userDetailsList = new ArrayList<>();
+		
+		for(int i=0;i<5;i++){
+		userDetailsList.add(User.withDefaultPasswordEncoder().username("user"+i).password("pass"+i)
+				.roles("MANAGER", "USER").build());
+			}
+		return new InMemoryUserDetailsManager(userDetailsList);
 	}
 }

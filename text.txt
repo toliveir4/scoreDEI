@@ -1,0 +1,5 @@
+psql -U postgres -d profsandstudents2
+
+SELECT * FROM INFORMATION_SCHEMA.TABLES;
+
+select * from user_w;
