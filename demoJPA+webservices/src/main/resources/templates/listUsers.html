@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List of User</title>
+        <meta charset="utf8"/>
+    </head>
+    <body>
+        <h1>List of Users</h1>
+  
+        <table border="1">
+          <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>PASSWORD</th>
+          </tr>
+          <tr th:each="u : ${web_user}">
+            <td th:text="${u.id}">id</td>
+            <td th:text="${u.name}">name</td>
+            <td th:text="${u.password}">password</td>
+          </tr>
+        </table>
+      
+    </body>
+</html>

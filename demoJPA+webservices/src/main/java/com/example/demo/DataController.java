@@ -143,6 +143,12 @@ public class DataController {
         model.addAttribute("teams", this.teamService.getAllTeams());
         return "listTeams";
     }
+    @GetMapping("/listUsers")
+    public String listUsers(Model model) {
+        model.addAttribute("web_user", this.userService.getAllUsers());
+        return "listUsers";
+    }
+
 
     @GetMapping("/createTeam")
     public String createTeam(Model m) {
