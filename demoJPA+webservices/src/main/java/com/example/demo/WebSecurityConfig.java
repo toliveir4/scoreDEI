@@ -43,14 +43,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	@Override
 	public UserDetailsService userDetailsService() {
-		for (int i = 0; i < 5; i++) {
-			manager.createUser(User.withDefaultPasswordEncoder()
-					.username("user"+i)
-					.password("pass" + i)
-					.roles("USER")
-					.build());
-		}
-
 		userDetailsList.add(User.withDefaultPasswordEncoder()
 					.username("admin1")
 					.password("adminPass")
@@ -61,11 +53,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	public UserDetailsService userDetailsService(List<WebUser>users) {
 		for (int i = 0; i < users.size(); i++) {
+			try{
 			manager.createUser(User.withDefaultPasswordEncoder()
 			.username(users.get(i).getName())
 			.password(users.get(i).getPassword())
 			.roles("USER")
-			.build());
+			.build());}
+			catch(Exception e){
+				;
+			}
 		}
 
 		userDetailsList.add(User.withDefaultPasswordEncoder()
