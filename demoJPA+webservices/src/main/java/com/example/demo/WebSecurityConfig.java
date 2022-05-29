@@ -12,10 +12,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import java.util.ArrayList;
+import java.util.List;
+import com.example.data.WebUser;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	ArrayList<UserDetails> userDetailsList = new ArrayList<>();
+	InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		/*http.csrf().disable().authorizeRequests()
@@ -25,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http
 				.authorizeRequests()
-				.antMatchers("/", "/home", "/signup").permitAll()
+				.antMatchers("/", "/home", "/signup","/saveUser").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
@@ -39,11 +43,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	@Override
 	public UserDetailsService userDetailsService() {
-		ArrayList<UserDetails> userDetailsList = new ArrayList<>();
-
 		for (int i = 0; i < 5; i++) {
-			userDetailsList.add(User.withDefaultPasswordEncoder()
-					.username("user" + i)
+			manager.createUser(User.withDefaultPasswordEncoder()
+					.username("user"+i)
 					.password("pass" + i)
 					.roles("USER")
 					.build());
@@ -55,6 +57,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.roles("ADMIN", "USER")
 					.build());
 
-		return new InMemoryUserDetailsManager(userDetailsList);
+		return manager;
+	}
+	public UserDetailsService userDetailsService(List<WebUser>users) {
+		for (int i = 0; i < users.size(); i++) {
+			manager.createUser(User.withDefaultPasswordEncoder()
+			.username(users.get(i).getName())
+			.password(users.get(i).getPassword())
+			.roles("USER")
+			.build());
+		}
+
+		userDetailsList.add(User.withDefaultPasswordEncoder()
+					.username("admin1")
+					.password("adminPass")
+					.roles("ADMIN", "USER")
+					.build());
+
+		return manager;
+	}
+	public UserDetailsService userDetailsService(String name,String password) {
+	
+			manager.createUser(User.withDefaultPasswordEncoder()
+			.username(name)
+			.password(password)
+			.roles("USER")
+			.build());
+	
+
+		userDetailsList.add(User.withDefaultPasswordEncoder()
+					.username("admin1")
+					.password("adminPass")
+					.roles("ADMIN", "USER")
+					.build());
+
+		return manager;
 	}
 }
