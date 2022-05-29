@@ -13,22 +13,22 @@ import org.springframework.stereotype.Service;
 public class EventService   
 {    
     @Autowired    
-    private EventRepository userRepository;
+    private EventRepository eventRepository;
 
     public List<Event> getAllUsers()  
     {    
         List<Event>userRecords = new ArrayList<>();    
-        userRepository.findAll().forEach(userRecords::add);    
+        eventRepository.findAll().forEach(userRecords::add);    
         return userRecords;    
     }
 
     public void addUser(Event User)  
     {    
-        userRepository.save(User);    
+        eventRepository.save(User);    
     }
 
     public Optional<Event> getUser(int id) {
-        return userRepository.findById(id);
+        return eventRepository.findById(id);
     }
 
 }    

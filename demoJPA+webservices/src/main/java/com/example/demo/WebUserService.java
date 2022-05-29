@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.data.WebUser;
+import com.example.data.WebUserDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,22 @@ public class WebUserService
         return userRecords;    
     }
 
-    public void addUser(WebUser User)  
-    {    
-        userRepository.save(User);    
+    public void addUser(WebUser User) throws Exception {
+        if (userRepository.findByNameEndsWith(User.getName()).isPresent())
+            throw new Exception("Username already exists!");
+
+        userRepository.save(User);
+    }
+
+    public void addUser(WebUserDTO User) throws Exception {    
+        if (userRepository.findByNameEndsWith(User.getName()).isPresent())
+            throw new Exception("Username already exists!");
+
+        WebUser u =  new WebUser();
+        u.setName(User.getName());
+        u.setPassword(User.getPassword());
+        u.setRoles("USER" + (User.isAdmin() ? "ADMIN" : ""));
+        userRepository.save(u);    
     }
 
     public Optional<WebUser> getUser(int id) {

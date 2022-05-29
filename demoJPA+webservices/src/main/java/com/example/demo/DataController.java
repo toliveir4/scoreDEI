@@ -3,13 +3,13 @@ package com.example.demo;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.data.Team;
+import javax.validation.Valid;
+
 import com.example.data.Player;
+import com.example.data.Team;
 import com.example.data.WebUser;
+import com.example.data.WebUserDTO;
 import com.example.formdata.FormData;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.example.demo.WebUserService;
-
 
 @Controller
 public class DataController {
@@ -43,7 +41,7 @@ public class DataController {
     }
 
     @PostMapping("/saveData")
-	public String saveData(Model model) {
+    public String saveData(Model model) {
         Team[] myTeams = {
                 new Team("Benfica", 34, 34, 0, 0),
                 new Team("Porto", 34, 0, 0, 35),
@@ -51,29 +49,31 @@ public class DataController {
         };
 
         WebUser[] users = {
-           
-            new WebUser("user","pass"),
-            new WebUser("tmatos","adeus"),
-            new WebUser("user1","pass1"),
-            new WebUser("user2","pass2"),
-            new WebUser("user3","pass3"),
+
+                new WebUser("user", "pass"),
+                new WebUser("tmatos", "adeus"),
+                new WebUser("user1", "pass1"),
+                new WebUser("user2", "pass2"),
+                new WebUser("user3", "pass3"),
         };
 
-        for (WebUser u : users)
-            this.userService.addUser(u);
+        for (WebUser u : users) {
+            try {
+                this.userService.addUser(u);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 
-
-
-        
         Player[] myPlayers = {
-                new Player("Darwin","CF", "24-6-1999"),
+                new Player("Darwin", "CF", "24-6-1999"),
                 new Player("Taarabt", "CM", "24-3-1989"),
                 new Player("Cristiano Ronaldo", "CF", "5-2-1985"),
                 new Player("Pepe", "CB", "26-2-1983"),
                 new Player("Ruben Dias", "CB", "14-5-1997"),
                 new Player("Palhinha", "CDM", "9-7-1995")
-            };
-
+        };
 
         myPlayers[0].setTeam(myTeams[0]);
         myPlayers[0].setTeam(myTeams[1]);
@@ -88,9 +88,9 @@ public class DataController {
 
         for (Player p : myPlayers)
             this.playerService.addPlayer(p);
-    
-		return "redirect:/listPlayers";
-	}
+
+        return "redirect:/listPlayers";
+    }
 
     @GetMapping("/listPlayers")
     public String listPlayers(Model model) {
@@ -106,17 +106,16 @@ public class DataController {
     }
 
     @GetMapping("/editPlayer")
-    public String editPlayer(@RequestParam(name="id", required=true) int id, Model m) {
+    public String editPlayer(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Player> op = this.playerService.getPlayer(id);
         if (op.isPresent()) {
             m.addAttribute("player", op.get());
             m.addAttribute("allTeams", this.teamService.getAllTeams());
             return "editPlayer";
-        }
-        else {
+        } else {
             return "redirect:/listPlayers";
         }
-    }    
+    }
 
     @PostMapping("/savePlayer")
     public String savePlayer(@ModelAttribute Player st) {
@@ -143,12 +142,6 @@ public class DataController {
         model.addAttribute("teams", this.teamService.getAllTeams());
         return "listTeams";
     }
-    @GetMapping("/listUsers")
-    public String listUsers(Model model) {
-        model.addAttribute("web_user", this.userService.getAllUsers());
-        return "listUsers";
-    }
-
 
     @GetMapping("/createTeam")
     public String createTeam(Model m) {
@@ -166,14 +159,38 @@ public class DataController {
     }
 
     @GetMapping("/editTeam")
-    public String editTeam(@RequestParam(name="id", required=true) int id, Model m) {
+    public String editTeam(@RequestParam(name = "id", required = true) int id, Model m) {
         return getEditTeamForm(id, "editTeam", m);
-    }    
+    }
 
     @PostMapping("/saveTeam")
     public String saveTeam(@ModelAttribute Team t) {
         this.teamService.addTeam(t);
         return "redirect:/listTeams";
     }
-    
+
+    @GetMapping("/signup")
+    private String signUp(Model m) {
+        m.addAttribute("web_user", new WebUserDTO());
+        return "signup";
+    }
+
+    @PostMapping("/saveUser")
+    private String saveUser(@ModelAttribute @Valid WebUserDTO u, Model m) {
+        try {
+            userService.addUser(u);
+        } catch (Exception e) {
+            m.addAttribute("error", "Username taken!");
+            return signUp(m);
+        }
+
+        return "redirect:/login";
+    }
+
+    @GetMapping("/listUsers")
+    public String listUsers(Model model) {
+        model.addAttribute("web_user", this.userService.getAllUsers());
+        return "listUsers";
+    }
+
 }

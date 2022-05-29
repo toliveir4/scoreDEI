@@ -51,9 +51,6 @@ public class WebUser {
     public void setId(int id) {
         this.id = id;
     }
-    //@XmlElementWrapper(name = "teamessors")
-    //@XmlElement(name = "team")
-    
 
     public String getName() {
         return name;
@@ -63,8 +60,18 @@ public class WebUser {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String toString() {
         return this.name + "(id = " + this.id + ")";
+    }
+
+    public void setRoles(String string) {
     }
 }

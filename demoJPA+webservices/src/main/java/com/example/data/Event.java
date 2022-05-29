@@ -1,18 +1,14 @@
 package com.example.data;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
 
 
 @Entity
@@ -72,10 +68,7 @@ public class Event {
     public void setId(int id) {
         this.id = id;
     }
-    //@XmlElementWrapper(info = "teamessors")
-    //@XmlElement(info = "team")
     
-
     public String getInfo() {
         return info;
     }
@@ -83,7 +76,6 @@ public class Event {
     public void setInfo(String info) {
         this.info = info;
     }
-
 
     public String toString() {
         return this.info + "(id = " + this.id + ")";
