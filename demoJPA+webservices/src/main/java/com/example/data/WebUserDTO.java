@@ -7,8 +7,8 @@ import lombok.Data;
 
 public class WebUserDTO {
     @NotNull
-    @NotEmpty(message = "Name cannot be empty")
-    private String Name;
+    @NotEmpty(message = "Username cannot be empty")
+    private String username;
 
     @NotNull
     @NotEmpty(message = "Password cannot be empty")
@@ -25,12 +25,12 @@ public class WebUserDTO {
     @NotNull
     private boolean admin;
 
-    public String getName() {
-        return Name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

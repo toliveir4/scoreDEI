@@ -8,7 +8,6 @@
 		"vscjava.vscode-maven",
 		"vscjava.vscode-java-pack",
 		"redhat.fabric8-analytics",
-		"mhutchie.git-graph",
-		"ms-vsliveshare.vsliveshare"
+		"mhutchie.git-graph"
 	]
 }

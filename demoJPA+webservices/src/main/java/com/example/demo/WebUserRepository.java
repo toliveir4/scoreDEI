@@ -7,5 +7,5 @@ import java.util.Optional;
 import com.example.data.WebUser;
 
 public interface WebUserRepository extends CrudRepository <WebUser, Integer> {
-    Optional<WebUser> findByNameEndsWith(String Name);
+    Optional<WebUser> findByUsernameEndsWith(String username);
 }    

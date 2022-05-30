@@ -70,10 +70,6 @@ public class Player {
         this.team = team;
     }
 
-    public void addProf(Team prof) {
-        //this.team.add(prof);
-    }
-
     //TODO verificar se a data e valida (?)
     public String getBirthday() {
         SimpleDateFormat d = new SimpleDateFormat("dd-mm-yyyy");
