@@ -1,4 +1,5 @@
 package com.example.data;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,7 +27,9 @@ public class Match {
     private Date date;
     private int status;
     private int scoreHome, scoreAway;
-    // private List<Event> events;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Event> events;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Team> teams;
@@ -33,34 +37,112 @@ public class Match {
     public Match() {
     }
 
-    public Match(String name, String resultado, String date) {
+    public Match(String name, String resultado, String date, int status, String score) {
         this.name = name;
         this.resultado = resultado;
-       try{
-        String [] a=resultado.split("-");
-        scoreHome=Integer.parseInt(a[0]);
-        scoreAway=Integer.parseInt(a[1]);
-       }
-       catch(Exception e){
+        this.status = status;
 
-       }
-        try{
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm");
-        this.date = formatter.parse(date);}
-        catch(Exception e){
-
+        try {
+            String[] a = resultado.split("-");
+            scoreHome = Integer.parseInt(a[0]);
+            scoreAway = Integer.parseInt(a[1]);
+        } catch (Exception e) {
         }
+
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm");
+            this.date = formatter.parse(date);
+        } catch (Exception e) {
+        }
+
         this.teams = new ArrayList<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(String resultado) {
+        this.resultado = resultado;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getScoreHome() {
+        return scoreHome;
+    }
+
+    public void setScoreHome(int scoreHome) {
+        this.scoreHome = scoreHome;
+    }
+
+    public int getScoreAway() {
+        return scoreAway;
+    }
+
+    public void setScoreAway(int scoreAway) {
+        this.scoreAway = scoreAway;
+    }
+
+    // TODO verificar se a data e valida (?)
+    public String getDate() {
+        SimpleDateFormat d = new SimpleDateFormat("dd-mm-yyyy");
+        return d.format(date);
+    }
+
+    public void setDate(String date) {
+        SimpleDateFormat dt = new SimpleDateFormat("dd-mm-yyyy");
+        Date d;
+        try {
+            d = dt.parse(date);
+            this.date = d;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @XmlElementWrapper(name = "teams")
     @XmlElement(name = "team")
-    public List<Team> getteams() {
+    public List<Team> getTeams() {
         return teams;
     }
 
-    public void addteam(Team team) {
+    public void addTeam(Team team) {
         this.teams.add(team);
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
     }
 
     public String toString() {
