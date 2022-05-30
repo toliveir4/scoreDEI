@@ -7,12 +7,11 @@ import javax.validation.Valid;
 
 import com.example.data.Player;
 import com.example.data.Team;
-<<<<<<< HEAD
+
 import com.example.data.Match;
 import com.example.data. WebUser;
-=======
 import com.example.data.WebUser;
->>>>>>> 4c1ce3040022223ced12d93d7364bd7230607448
+
 import com.example.data.WebUserDTO;
 import com.example.formdata.FormData;
 import org.springframework.beans.factory.annotation.Autowired;
