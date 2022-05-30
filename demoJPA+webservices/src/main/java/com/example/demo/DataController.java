@@ -101,8 +101,8 @@ public class DataController {
             this.playerService.addPlayer(p);
 
         Match[] match = {
-                new Match("user vs a", "2-1", "22-12-2020 15:30", 1, "1-0 "),
-                new Match("tmatos vs user", "2-3", "22-12-2020 12:30", 1, "0-5"),
+                new Match("user vs a", "2-1", "22-12-2020 15:30", 1),
+                new Match("tmatos vs user", "2-3", "22-12-2020 12:30", 1),
         };
         
         for (Match m : match)
@@ -219,5 +219,21 @@ public class DataController {
         model.addAttribute("web_user", this.userService.getAllUsers());
         return "listUsers";
     }
+    @GetMapping("/listMatchs")
+    public String listEvents(Model model) {
+        model.addAttribute("matchs", this.matchService.getAllMatchs());
+        return "listMatchs";
+    }
+    @GetMapping("/Match")
+    public String match(@RequestParam(name="id", required=true) int id, Model m) {
+        Optional<Match> op = this.matchService.getMatch(id);
+        if (op.isPresent()) {
+            m.addAttribute("match", op.get());
+            return "Match";
+        }
+        else {
+            return "redirect:/listStudents";
+        }
+    }    
 
 }

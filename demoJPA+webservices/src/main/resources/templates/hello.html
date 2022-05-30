@@ -5,16 +5,16 @@
 <head>
     <title>Hello World!</title>
 
-    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 </head>
 
 <body>
     <div class="menu">
         <ul>
             <li><a class="active" href="">Home</a></li>
-            <li><a href="">List of Players</a></li>
-            <li><a href="">List of Teams</a></li>
-            <li><a href="">Create Dummy Data</a></li>
+            <li><a th:href="@{/listPlayers}">List of Players</a></li>
+            <li><a th:href="@{/listTeams}">List of Teams</a></li>
+            <li><a th:href="@{/createData}">Create Dummy Data</a></li>
         </ul>
     </div>
     <br>

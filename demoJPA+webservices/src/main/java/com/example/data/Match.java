@@ -23,7 +23,7 @@ public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String resultado, name;
+    private String score, name;
     private Date date;
     private int status;
     private int scoreHome, scoreAway;
@@ -37,13 +37,13 @@ public class Match {
     public Match() {
     }
 
-    public Match(String name, String resultado, String date, int status, String score) {
+    public Match(String name, String score, String date, int status) {
         this.name = name;
-        this.resultado = resultado;
+        this.score = score;
         this.status = status;
 
         try {
-            String[] a = resultado.split("-");
+            String[] a = score.split("-");
             scoreHome = Integer.parseInt(a[0]);
             scoreAway = Integer.parseInt(a[1]);
         } catch (Exception e) {
@@ -66,12 +66,12 @@ public class Match {
         this.id = id;
     }
 
-    public String getResultado() {
-        return resultado;
+    public String getScore() {
+        return score;
     }
 
-    public void setResultado(String resultado) {
-        this.resultado = resultado;
+    public void setScore(String score) {
+        this.score = score;
     }
 
     public List<Event> getEvents() {
@@ -146,6 +146,6 @@ public class Match {
     }
 
     public String toString() {
-        return this.name + "(id = " + this.id + "). Telephone: " + this.resultado;
+        return this.name + "(id = " + this.id + "). Telephone: " + this.score;
     }
 }
