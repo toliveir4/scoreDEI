@@ -24,19 +24,20 @@ public class WebUserService
     }
 
     public void addUser(WebUser User) throws Exception {
-        if (userRepository.findByNameEndsWith(User.getName()).isPresent())
+        if (userRepository.findByUsernameEndsWith(User.getUsername()).isPresent())
             throw new Exception("Username already exists!");
 
         userRepository.save(User);
     }
 
     public void addUser(WebUserDTO User) throws Exception {    
-        if (userRepository.findByNameEndsWith(User.getName()).isPresent())
+        if (userRepository.findByUsernameEndsWith(User.getUsername()).isPresent())
             throw new Exception("Username already exists!");
 
         WebUser u =  new WebUser();
-        u.setName(User.getName());
+        u.setUsername(User.getUsername());
         u.setPassword(User.getPassword());
+        u.setEmail(User.getEmail());
         u.setRoles("USER" + (User.isAdmin() ? "ADMIN" : ""));
         userRepository.save(u);    
     }

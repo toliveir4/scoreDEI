@@ -7,7 +7,12 @@ import javax.validation.Valid;
 
 import com.example.data.Player;
 import com.example.data.Team;
+<<<<<<< HEAD
+import com.example.data.Match;
 import com.example.data. WebUser;
+=======
+import com.example.data.WebUser;
+>>>>>>> 4c1ce3040022223ced12d93d7364bd7230607448
 import com.example.data.WebUserDTO;
 import com.example.formdata.FormData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +22,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.example.demo.WebSecurityConfig;
+
 @Controller
 public class DataController {
 
     @Autowired
     TeamService teamService;
+    @Autowired
+    MatchService matchService;
 
     @Autowired
     PlayerService playerService;
 
     @Autowired
     WebUserService userService;
+
     @Autowired
-    WebSecurityConfig securtyService;
+    WebSecurityConfig securityService;
 
     @GetMapping("/")
     public String redirect() {
-        securtyService.userDetailsService(userService.getAllUsers());
+        securityService.userDetailsService(userService.getAllUsers());
         return "redirect:/home";
     }
 
@@ -45,6 +53,9 @@ public class DataController {
 
     @PostMapping("/saveData")
     public String saveData(Model model) {
+
+
+
         Team[] myTeams = {
                 new Team("Benfica", 34, 34, 0, 0),
                 new Team("Porto", 34, 0, 0, 35),
@@ -53,14 +64,14 @@ public class DataController {
 
         WebUser[] users = {
 
-                new  WebUser("user", "pass"),
-                new  WebUser("tmatos", "adeus"),
-                new  WebUser("user1", "pass1"),
-                new  WebUser("user2", "pass2"),
-                new  WebUser("user3", "pass3"),
+                new WebUser("user", "pass"),
+                new WebUser("tmatos", "adeus"),
+                new WebUser("user1", "pass1"),
+                new WebUser("user2", "pass2"),
+                new WebUser("user3", "pass3"),
         };
 
-        for ( WebUser u : users) {
+        for (WebUser u : users) {
             try {
                 this.userService.addUser(u);
             } catch (Exception e) {
@@ -92,6 +103,13 @@ public class DataController {
         for (Player p : myPlayers)
             this.playerService.addPlayer(p);
 
+        Match[] match = {
+                new  Match("user vs a", "2-1","22-12-2020 15:30"),
+                new  Match("tmatos vs user", "2-3","22-12-2020 12:30"),  
+        };
+        for (Match m : match)
+        this.matchService.addMatch(m);
+
         return "redirect:/listPlayers";
     }
 
@@ -104,7 +122,7 @@ public class DataController {
     @GetMapping("/createPlayer")
     public String createPlayer(Model m) {
         m.addAttribute("player", new Player());
-        m.addAttribute("allProfessors", this.teamService.getAllTeams());
+        m.addAttribute("allTeams", this.teamService.getAllTeams());
         return "editPlayer";
     }
 
@@ -172,18 +190,24 @@ public class DataController {
         return "redirect:/listTeams";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        securityService.userDetailsService(userService.getAllUsers());
+        return "login";
+    }
+
     @GetMapping("/signup")
     private String signUp(Model m) {
-        m.addAttribute("web_user", new WebUserDTO());
+        m.addAttribute("web_user", new WebUser());
         return "signup";
     }
 
     @PostMapping("/saveUser")
-    private String saveUser(@ModelAttribute @Valid WebUserDTO u, Model m) {
+    private String saveUser(@ModelAttribute @Valid WebUser u, Model m) {
         try {
             userService.addUser(u);
-            securtyService.userDetailsService(u.getName(),u.getPassword());
-            
+            securityService.userDetailsService(u.getUsername(), u.getPassword());
+
         } catch (Exception e) {
             m.addAttribute("error", "Username taken!");
             return signUp(m);
