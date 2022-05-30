@@ -7,21 +7,14 @@
 <body>
     <div class="w3-center" style="margin-top: 10% ;margin-left:30% ;margin-right: 30%;padding-bottom: 2%;">
     <h1 >Sign Up</h1>
-    <form th:action="@{/saveUser}" th:object="${web_user}" method="POST" enctype="utf8">
-<<<<<<< HEAD
-        <div class="mb-3">
-            <label>Name: </label>
-            <input th:field="*{Name}"  class="form-control" />
-            <p th:each="error: ${#fields.errors('Name')}" th:text="${error}">Validation error</p>
-=======
         <div th:if="${param.error}" style="color: red">
             Username already exists.
         </div>
-        <div>
+        <form th:action="@{/saveUser}" th:object="${web_user}" method="POST" enctype="utf8">
+        <div class="mb-3">
             <label>Username: </label>
-            <input th:field="*{Username}" />
+            <input th:field="*{Username}"class="form-control" />
             <p th:each="error: ${#fields.errors('Username')}" th:text="${error}">Validation error</p>
->>>>>>> 4c1ce3040022223ced12d93d7364bd7230607448
         </div>
         <div class="mb-3">
             <label>Email: </label>
@@ -33,27 +26,18 @@
             <input type="password" th:field="*{password}"  class="form-control" />
             <p th:each="error : ${#fields.errors('password')}" th:text="${error}">Validation error</p>
         </div>
-<<<<<<< HEAD
         <div class="mb-3">
-            <label >Confirm password: </label>
-            <input   class="form-control" type="password" th:field="*{matchingPassword}" />
+            <label>Confirm password: </label>
+            <input type="password" id="matchingPassword" name="matchingPassword" value=""  class="form-control" >
+            
         </div>
-        <div class="mb-3">
-            <label  >Is Admin?</label>
-            <input type="checkbox" th:field="*{admin}">
-        </div>
-        <div class="mb-3">
-        <button   class="btn btn-success" type="submit" style="padding: 1% 8%">Submit</button>
-    </div>
-=======
         <div>
             <label>Is Admin?</label>
             <input type="checkbox" th:field="*{admin}">
         </div>
         <div>
-        <button type="submit">Submit</button>
+        <button class="btn btn-success"  type="submit" style="padding: 1% 8%">Submit</button>
         </div>
->>>>>>> 4c1ce3040022223ced12d93d7364bd7230607448
     </form>
 </div>
 <div class="w3-center">
