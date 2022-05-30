@@ -25,10 +25,12 @@
                 </h2>
             </a>
             <ul class="menu">
-                <li><a class="active" href="">Home</a></li>
-                <li><a href="">List of Players</a></li>
-                <li><a href="">List of Teams</a></li>
-                <li><a href="">Create Dummy Data</a></li>
+                <li><a class="active">Home</a></li>
+                <li><a th:href="@{/listPlayers}">List of Players</a></li>
+                <li><a th:href="@{/listTeams}">List of Teams</a></li>
+                <li><a th:href="@{/listUsers}">List of Users</a></li>
+                <li><a th:href="@{/createData}">Create Dummy Data</a></li>
+                <li><a th:href="@{/login?logout}">Sign Out</a></li>
             </ul>
         </div>
     </nav>
@@ -36,10 +38,10 @@
     <br>
     <div align="center" style="margin-top: 20%">
         <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out" />
-        </form>
     </div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out" />
+    </form>
 </body>
 
 </html>

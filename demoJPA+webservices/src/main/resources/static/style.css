@@ -5,13 +5,13 @@
     --txt2: #02b75a;
     --txt2-nav: #212121;
     --note: #02b75a;
-    --bbg: #d4d4d4;
+    --bbg: #f0f0f0;
     color: black;
     --per: 0%;
 }
 
 h1 {
-    color: #02b75a;
+    color: #1eb466;
     font-family: 'Oxygen', sans-serif;
 }
 
