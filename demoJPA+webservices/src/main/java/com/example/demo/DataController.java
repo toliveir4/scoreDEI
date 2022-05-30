@@ -9,7 +9,7 @@ import com.example.data.Player;
 import com.example.data.Team;
 
 import com.example.data.Match;
-import com.example.data. WebUser;
+import com.example.data.WebUser;
 import com.example.data.WebUser;
 
 import com.example.data.WebUserDTO;
@@ -52,8 +52,6 @@ public class DataController {
 
     @PostMapping("/saveData")
     public String saveData(Model model) {
-
-
 
         Team[] myTeams = {
                 new Team("Benfica", 34, 34, 0, 0),
@@ -103,11 +101,12 @@ public class DataController {
             this.playerService.addPlayer(p);
 
         Match[] match = {
-                new  Match("user vs a", "2-1","22-12-2020 15:30"),
-                new  Match("tmatos vs user", "2-3","22-12-2020 12:30"),  
+                new Match("user vs a", "2-1", "22-12-2020 15:30", 1, "1-0 "),
+                new Match("tmatos vs user", "2-3", "22-12-2020 12:30", 1, "0-5"),
         };
+        
         for (Match m : match)
-        this.matchService.addMatch(m);
+            this.matchService.addMatch(m);
 
         return "redirect:/listPlayers";
     }

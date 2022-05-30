@@ -116,12 +116,12 @@ public class Match {
 
     // TODO verificar se a data e valida (?)
     public String getDate() {
-        SimpleDateFormat d = new SimpleDateFormat("dd-mm-yyyy");
+        SimpleDateFormat d = new SimpleDateFormat("dd-mm-yyyy HH:mm");
         return d.format(date);
     }
 
     public void setDate(String date) {
-        SimpleDateFormat dt = new SimpleDateFormat("dd-mm-yyyy");
+        SimpleDateFormat dt = new SimpleDateFormat("dd-mm-yyyy HH:mm");
         Date d;
         try {
             d = dt.parse(date);

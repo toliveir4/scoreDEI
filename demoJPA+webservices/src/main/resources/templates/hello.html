@@ -1,13 +1,30 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
-        <title>Hello World!</title>
-    </head>
-    <body>
+    xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <title>Hello World!</title>
+
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+</head>
+
+<body>
+    <div class="menu">
+        <ul>
+            <li><a class="active" href="">Home</a></li>
+            <li><a href="">List of Players</a></li>
+            <li><a href="">List of Teams</a></li>
+            <li><a href="">Create Dummy Data</a></li>
+        </ul>
+    </div>
+    <br>
+    <br>
+    <div align="center" style="margin-top: 20%">
         <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
         <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
+            <input type="submit" value="Sign Out" />
         </form>
-    </body>
+    </div>
+</body>
+
 </html>
