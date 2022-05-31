@@ -11,6 +11,7 @@ import com.example.data.Team;
 import com.example.data.Match;
 import com.example.data.WebUser;
 import com.example.data.Event;
+import java.util.Date;
 
 import com.example.data.WebUserDTO;
 import com.example.formdata.FormData;
@@ -43,6 +44,9 @@ public class DataController {
 
     @Autowired
     EventService eventService;
+
+    @Autowired
+    EventRepository eventRepository;
 
     @Autowired
     WebSecurityConfig securityService;
@@ -257,6 +261,7 @@ public class DataController {
     public String match(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Match> op = this.matchService.getMatch(id);
         if (op.isPresent()) {
+            m.addAttribute("events",eventRepository.getEventsFromMatch(op.get()));
             m.addAttribute("match", op.get());
             return "match";
         } else {
@@ -268,6 +273,7 @@ public class DataController {
     public String createEvent(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Match> op = this.matchService.getMatch(id);
         if (op.isPresent()) {
+            
             Match match = op.get();
             Event event = new Event(match.getName(), "info1", "86:02", 1);
             event.setMatch(match);
@@ -285,12 +291,13 @@ public class DataController {
     @GetMapping("/saveEvent")
     public String saveEvent(@ModelAttribute Event event, Model m) {
         try {
+            event.setTime(new Date());
             this.eventService.addEvent(event);
 
         } catch (Exception e) {
             return "redirect:/listMatches";
         }
-        return match(event.getMatch().getId(), m);
+        return "redirect:/match?id="+event.getMatch().getId();
     }
 
 }

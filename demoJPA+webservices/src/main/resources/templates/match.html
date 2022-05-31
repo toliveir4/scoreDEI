@@ -9,5 +9,16 @@
             <h5 th:text="*{score}"></h5>
             <a th:href="@{createEvent(id=*{id})}">ooooo</a>
         </div>
+</div>
+<div>
+    <table class="table">
+        <thead>
+          <tr th:each="e : ${events}">
+            <td th:text="${e.id}">id</td>
+            <td th:text="${e.title}">name</td>
+            <td th:text="${e.info}">games</td>
+          </tr>
+        </thead>
+        </table>
 
 </div>

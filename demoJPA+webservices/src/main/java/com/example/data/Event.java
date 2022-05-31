@@ -53,6 +53,7 @@ public class Event {
     public Event() {
     }
 
+
     public Event(String title, String info, String time, int type) {
         this.title = title;
         this.info = info;
@@ -80,6 +81,9 @@ public class Event {
         SimpleDateFormat d = new SimpleDateFormat("mm:ss");
         return d.format(time);
     }
+    public void setTime(Date time) {
+        this.time=time;
+    }
 
     public void setTime(String time) {
         SimpleDateFormat dt = new SimpleDateFormat("mm:ss");
@@ -88,7 +92,7 @@ public class Event {
             d = dt.parse(time);
             this.time = d;
         } catch (ParseException e) {
-            e.printStackTrace();
+            System.out.println("Warning: Invalid Event Time!!");
         }
     }
 
