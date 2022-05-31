@@ -39,14 +39,12 @@
         <table class="table">
           <thead>
           <tr>
-            <th>ID</th>
             <th>NAME</th>
             <th>SCORE</th>
             <th>DATE</th>
           </tr>
            <!--- <tr th:each="m : ${matchs}"  class='clickable-row' th:href="  window.open('@{match(id=${m.id})}','_blank')" > -->
             <tr th:each="m : ${matches}"  class='clickable-row'>  
-            <td th:text="${m.id}">id</td>
             <td th:text="${m.name}">name</td>
             <td th:text="${m.score}">score</td>
             <td th:text="${m.date}">date</td>

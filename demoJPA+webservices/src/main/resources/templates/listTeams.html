@@ -46,7 +46,6 @@
   <table class="table">
     <thead>
       <tr>
-        <th>ID</th>
         <th>NAME</th>
         <th><a th:href="@{'/listTeams?field=games&order=' + ${reverseSort}}">GAMES</a></th>
         <th><a th:href="@{'/listTeams?field=wins&order=' + ${reverseSort}}">WINS</a></th>
@@ -56,7 +55,6 @@
         <th>EDIT</th>
       </tr>
       <tr th:each="t : ${teams}">
-        <td th:text="${t.id}">id</td>
         <td th:text="${t.name}">name</td>
         <td th:text="${t.games}">games</td>
         <td th:text="${t.wins}">wins</td>

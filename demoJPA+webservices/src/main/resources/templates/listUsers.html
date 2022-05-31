@@ -45,14 +45,12 @@
 
   <table class="table">
     <tr>
-      <th>ID</th>
       <th>USERNAME</th>
       <th>PASSWORD</th>
       <th>EMAIL</th>
       <th>ADMIN</th>
     </tr>
     <tr th:each="u : ${web_user}">
-      <td th:text="${u.id}">id</td>
       <td th:text="${u.username}">username</td>
       <td th:text="${u.password}">password</td>
       <td th:text="${u.email}">email</td>

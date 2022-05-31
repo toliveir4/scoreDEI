@@ -51,16 +51,14 @@
   <table class="table">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>NAME</th>
+        <th><a th:href="@{'/listPlayers?field=name&order=' + ${reverseSort}}">NAME</a></th>
         <th>POSITION</th>
-        <th>GOALS</th>
+        <th><a th:href="@{'/listPlayers?field=goals&order=' + ${reverseSort}}">GOALS</a></th>
         <th>BIRTHDAY</th>
         <th>CHANGE</th>
-        <th>TEAM</th>
+        <th><a th:href="@{'/listPlayers?field=team'">TEAM</a></th>
       </tr>
       <tr th:each="s : ${players}">
-        <td th:text="${s.id}">id</td>
         <td th:text="${s.name}">name</td>
         <td th:text="${s.position}">position</td>
         <td th:text="${s.goals}">goals</td>
