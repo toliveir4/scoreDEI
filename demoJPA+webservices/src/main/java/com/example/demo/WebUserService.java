@@ -38,7 +38,6 @@ public class WebUserService
         u.setUsername(User.getUsername());
         u.setPassword(User.getPassword());
         u.setEmail(User.getEmail());
-        u.setRoles("USER" + (User.isAdmin() ? "ADMIN" : ""));
         userRepository.save(u);    
     }
 

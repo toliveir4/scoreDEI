@@ -44,6 +44,7 @@ public class WebUser {
     public WebUser(String username, String password) {
         this.username = username;
         this.password = password;
+        this.admin = false;
     }
 
     public int getId() {
@@ -92,13 +93,6 @@ public class WebUser {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setRoles(String string) {
-        if (string.contains("ADMIN"))
-            setAdmin(true);
-        else
-            setAdmin(false);
     }
 
     public String toString() {

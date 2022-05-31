@@ -83,11 +83,15 @@ public class Team {
         this.defeats = defeats;
     }
 
-    public String toString() {
-        return this.name + " (id = " + this.id + ").";
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public List<Player> getStudents() {
-        return this.players;
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public String toString() {
+        return this.name + " (id = " + this.id + ").";
     }
 }

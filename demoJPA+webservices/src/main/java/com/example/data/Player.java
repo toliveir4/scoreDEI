@@ -22,7 +22,7 @@ import java.util.List;
 public class Player {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int goals;
+    private int goals, assists, yellows, reds;
     private String name, position;
     private Date birthday;
 
@@ -55,22 +55,7 @@ public class Player {
     public void setId(int id) {
         this.id = id;
     }
-    
-    public String getPosition() {
-        return position;
-    }
-    
-    @XmlElementWrapper(name = "teams")
-    @XmlElement(name = "team")
-    public Team getTeam() {
-        return team;
-    }
-    
-    public void setTeam(Team team) {
-        this.team = team;
-    }
 
-    //TODO verificar se a data e valida (?)
     public String getBirthday() {
         SimpleDateFormat d = new SimpleDateFormat("dd-mm-yyyy");
         return d.format(birthday);
@@ -95,6 +80,10 @@ public class Player {
         this.name = name;
     }
 
+    public String getPosition() {
+        return position;
+    }
+
     public void setPosition(String position) {
         this.position = position;
     }
@@ -105,6 +94,48 @@ public class Player {
 
     public void setGoals(int goals) {
         this.goals = goals;
+    }
+
+    public int getAssists() {
+        return assists;
+    }
+
+    public void setAssists(int assists) {
+        this.assists = assists;
+    }
+
+    public int getYellows() {
+        return yellows;
+    }
+
+    public void setYellows(int yellows) {
+        this.yellows = yellows;
+    }
+
+    public int getReds() {
+        return reds;
+    }
+
+    public void setReds(int reds) {
+        this.reds = reds;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    @XmlElementWrapper(name = "teams")
+    @XmlElement(name = "team")
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public String toString() {

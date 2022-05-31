@@ -1,17 +1,17 @@
 :root {
-    --bg: #02b75a;
+    --bg: #003566;
     --txt: #2d2d2d;
     --txt-1: black;
-    --txt2: #02b75a;
+    --txt2: #003566;
     --txt2-nav: #212121;
-    --note: #02b75a;
-    --bbg: #f0f0f0;
+    --note: #003566;
+    --bbg: #e6eefa;
     color: black;
     --per: 0%;
 }
 
 h1 {
-    color: #1eb466;
+    color: #008fb7;
     font-family: 'Oxygen', sans-serif;
 }
 
@@ -21,7 +21,7 @@ h1 {
 
 a {
     font-size: 18px;
-    color: #02b75a;
+    color: #003566;
 }
 
 body a:hover {
@@ -56,7 +56,7 @@ nav a {
 body {
     font-family: 'Oxygen', sans-serif;
     background-color: var(--bbg);
-    color: black;
+    color: white;
 }
 
 .menu {
@@ -74,14 +74,31 @@ body {
     text-align: center;
     padding: 16px 16px;
     text-decoration: none;
-    background-color: #02b75a;
+    background-color: #003566;
 }
 
 .menu li a:hover:not(.active) {
     color: white;
-    background-color: #333;
+    background-color: #008fb7;
 }
 
 .menu .active {
-    background-color: #333;
+    background-color: #008fb7;
+}
+
+#dummy {
+    margin-left: 45%;
+    margin-right: 45%;
+    list-style-type: none;
+}
+
+#dummy button {
+    font-size: 10px;
+    font-weight: bold;  
+    color: white;
+    text-align: center;
+    padding: 10px 10px;
+    border-radius: 5%;
+    text-decoration: none;
+    background-color: #222;
 }

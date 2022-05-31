@@ -49,11 +49,6 @@ public class DataController {
         return "redirect:/home";
     }
 
-    @GetMapping("/createData")
-    public String createData() {
-        return "createData";
-    }
-
     @PostMapping("/saveData")
     public String saveData(Model model) {
 
@@ -233,9 +228,9 @@ public class DataController {
         return "listUsers";
     }
 
-    @GetMapping("/listMatchs")
-    public String listEvents(Model model) {
-        model.addAttribute("matchs", this.matchService.getAllMatchs());
+    @GetMapping("/listMatches")
+    public String listMatches(Model model) {
+        model.addAttribute("matches", this.matchService.getAllMatchs());
         return "listMatchs";
     }
 
@@ -246,7 +241,7 @@ public class DataController {
             m.addAttribute("match", op.get());
             return "match";
         } else {
-            return "redirect:/listMatchs";
+            return "redirect:/listMatches";
         }
     }
     @GetMapping("/createEvent")

@@ -2,6 +2,7 @@ package com.example.demo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,18 +21,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	ArrayList<UserDetails> userDetailsList = new ArrayList<>();
 	InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		/*
-		 * http.csrf().disable().authorizeRequests()
-		 * .antMatchers("/admin/**").hasRole("ADMIN")
-		 * .anyRequest().permitAll()
-		 * .and().formLogin(Customizer.withDefaults());
-		 */
+	/*
+	 * @Configuration
+	 * 
+	 * @Order(1)
+	 * public static class AdminSecurityConfig extends WebSecurityConfigurerAdapter
+	 * {
+	 * public AdminSecurityConfig () {
+	 * super ();
+	 * }
+	 * 
+	 * protected void configure(HttpSecurity http) throws Exception {
+	 * http.csrf().disable().authorizeRequests()
+	 * .antMatchers("/admin/**").hasRole("ADMIN")
+	 * .anyRequest().permitAll()
+	 * .and()
+	 * .formLogin()
+	 * .loginPage("/admin/login");
+	 * }
+	 * }
+	 * 
+	 * @Configuration
+	 * 
+	 * @Order(2)
+	 * public static class UserSecurityConfig extends WebSecurityConfigurerAdapter {
+	 * public UserSecurityConfig () {
+	 * super ();
+	 * }
+	 */
 
+	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.antMatchers("/", "/home", "/signup", "/saveUser","/style.css","/static/**").permitAll()
+				.antMatchers("/", "/home", "/signup", "/saveUser", "/style.css").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
@@ -42,6 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logout().logoutUrl("/login?logout")
 				.permitAll();
 	}
+	// }
 
 	@Bean
 	@Override

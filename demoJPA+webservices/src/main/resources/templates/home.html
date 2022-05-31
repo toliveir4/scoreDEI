@@ -11,14 +11,14 @@
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <link rel="stylesheet" type="text/css" href="/style.css">
 
     <title>Home</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="padding-top:0; padding-bottom:0">
-        <div class="container-fluid" style="padding-right:0;">
+        <div class="container-fluid" style="padding-right:0; margin-bottom: 5px;">
             <a class="navbar-brand" href="@{/home}"
                 style=" display: inline-flex;font-size:34px; margin-top: -10px;font-family: 'Varela Round';">
 
@@ -28,14 +28,11 @@
                     <b>scoreDEI</b>
                 </h2>
             </a>
-            <ul class="menu"></ul>
         </div>
     </nav>
     <div class="w3-center" style="margin-top: 10%;">
-
         <h1 style="font-size: 90px;">Welcome!</h1>
-
-        <p>Click <a th:href="@{/login}">here </a> to Login.</p>
+        <p style="color: black; font-size: 24px;">Click <a th:href="@{/login}">here</a> to Login.</p>
     </div>
 </body>
 

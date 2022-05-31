@@ -7,13 +7,9 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
-<body>
-    <div class="w3-center" style="padding-top: 2%; margin-top: 2%; margin-left:30%; margin-right: 30%; padding-bottom: 2%; background-color: rgb(194, 232, 231); border-radius: 5%; box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.14);">
+<body style="background-color:#e6eefa; color:white">
+    <div class="w3-center" style="padding-top: 2%; margin-top: 2%; margin-left:30%; margin-right: 30%; padding-bottom: 2%; background-color: #003566; border-radius: 5%; box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.70);">
         <h1>Sign Up</h1>
-        <div th:if="${param.error}" style="color: red; font-weight: bold; font-size: 20;">
-            Username already exists.
-        </div>
-        <br>
         <form th:action="@{/saveUser}" th:object="${web_user}" method="POST" enctype="utf8">
             <div class="mb-3" align="center">
                 <label>Username: </label>
@@ -33,18 +29,18 @@
             <div class="mb-3" align="center">
                 <label>Confirm password: </label>
                 <input type="password" id="matchingPassword" name="matchingPassword" value="" class="form-control" style="width: 50%;">
-
-            </div>
-            <div>
-                <label>Are you an Admin?</label>
-                <input type="checkbox" th:field="*{admin}">
             </div>
             <br>
             <div>
-                <button class="btn btn-success" type="submit" style="padding: 1% 8%">Submit</button>
+                <button class="btn btn-success" type="submit" style="padding: 1% 8%; background-color: #008fb7; border-color: #008fb7;">Submit</button>
             </div>
         </form>
-        <div class="w3-center" style="margin-top: 5%">
+        <br>
+        <div th:if="${param.error}" style="color: #ff0000; font-weight: bold; font-size: 20;">
+            Username already exists.
+        </div>
+        <br>
+        <div class="w3-center">
             <a th:href="@{/login}">Login</a>
         </div>
     </div>
