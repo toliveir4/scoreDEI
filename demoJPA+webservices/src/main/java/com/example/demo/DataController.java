@@ -14,6 +14,11 @@ import com.example.data.Event;
 
 import com.example.data.WebUserDTO;
 import com.example.formdata.FormData;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,7 +44,6 @@ public class DataController {
     @Autowired
     EventService eventService;
 
-
     @Autowired
     WebSecurityConfig securityService;
 
@@ -47,6 +51,22 @@ public class DataController {
     public String redirect() {
         securityService.userDetailsService(userService.getAllUsers());
         return "redirect:/home";
+    }
+
+    @GetMapping("/loadData")
+    public String loadData() throws UnirestException {
+        String URL = "https://v3.football.api-sports.io/";
+        // Premier League 2021
+        String ENDPOINT = "teams?league=39&season=2021";
+        String API_KEY = "6dbe15bb3475e04f108b39b89b365672";
+
+        Unirest.setTimeouts(0, 0);
+        HttpResponse<JsonNode> response = Unirest.get(URL + ENDPOINT)
+                .header("x-rapidapi-key", API_KEY)
+                .header("x-rapidapi-host", "v3.football.api-sports.io")
+                .asJson();
+
+        return "redirect:/hello";
     }
 
     @PostMapping("/saveData")
@@ -107,10 +127,9 @@ public class DataController {
         for (Match m : match)
             this.matchService.addMatch(m);
 
-
         Event[] event = {
-                new Event("title1", "info1","86:02", 1),
-                new Event("title2", "info2", "90:01",1),
+                new Event("title1", "info1", "86:02", 1),
+                new Event("title2", "info2", "90:01", 1),
         };
 
         for (Event e : event)
@@ -244,31 +263,32 @@ public class DataController {
             return "redirect:/listMatches";
         }
     }
+
     @GetMapping("/createEvent")
     public String createEvent(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Match> op = this.matchService.getMatch(id);
         if (op.isPresent()) {
-            Match match =op.get();
-            Event event =new Event(match.getName(),"info1","86:02", 1);
+            Match match = op.get();
+            Event event = new Event(match.getName(), "info1", "86:02", 1);
             event.setMatch(match);
-            m.addAttribute("event",event);
+            m.addAttribute("event", event);
             // saveEvent
-            //this.eventService.addEvent(event);
+            // this.eventService.addEvent(event);
             return "createEvent";
         } else {
             return "redirect:/listMatchs";
         }
     }
+
     @GetMapping("/saveEvent")
     public String saveEvent(@ModelAttribute Event event, Model m) {
         try {
             this.eventService.addEvent(event);
-            
+
         } catch (Exception e) {
             return "redirect:/listMatchs";
         }
         return match(event.getMatch().getId(), m);
     }
-
 
 }
