@@ -6,6 +6,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="/style.css">
 <html>
     <head>
         <title>List of Matches </title>
@@ -33,7 +34,7 @@
           </ul>
         </div>
       </nav>
-
+        <br>
         <h1 align="center">List of Matches</h1>
         <table class="table">
           <thead>
@@ -44,14 +45,12 @@
             <th>DATE</th>
           </tr>
            <!--- <tr th:each="m : ${matchs}"  class='clickable-row' th:href="  window.open('@{match(id=${m.id})}','_blank')" > -->
-           
             <tr th:each="m : ${matches}"  class='clickable-row'>  
             <td th:text="${m.id}">id</td>
             <td th:text="${m.name}">name</td>
             <td th:text="${m.score}">score</td>
             <td th:text="${m.date}">date</td>
             <td ><a th:href="@{match(id=${m.id})}">ooooo</a></td>
-            </form>
             </tr>
            
           </thead>

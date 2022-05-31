@@ -250,7 +250,7 @@ public class DataController {
     @GetMapping("/listMatches")
     public String listMatches(Model model) {
         model.addAttribute("matches", this.matchService.getAllMatchs());
-        return "listMatchs";
+        return "listMatches";
     }
 
     @GetMapping("/match")
@@ -272,11 +272,13 @@ public class DataController {
             Event event = new Event(match.getName(), "info1", "86:02", 1);
             event.setMatch(match);
             m.addAttribute("event", event);
+            m.addAttribute("allTeams", this.teamService.getAllTeams());
+            m.addAttribute("allPlayers", this.playerService.getAllPlayers());
             // saveEvent
             // this.eventService.addEvent(event);
             return "createEvent";
         } else {
-            return "redirect:/listMatchs";
+            return "redirect:/listMatches";
         }
     }
 
@@ -286,7 +288,7 @@ public class DataController {
             this.eventService.addEvent(event);
 
         } catch (Exception e) {
-            return "redirect:/listMatchs";
+            return "redirect:/listMatches";
         }
         return match(event.getMatch().getId(), m);
     }

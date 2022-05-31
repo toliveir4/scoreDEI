@@ -5,26 +5,50 @@
                 <input type="hidden" th:field="*{id}">
             </div>
             <div>
-                <label>Name</label>
+                <label>Title</label>
                 <input type="text" th:field="*{title}">
             </div>
             <div>
-                <label>Position</label>
+                <label>Info</label>
                 <input type="text" th:field="*{info}">
             </div>
             <div>
-                <label>Goals</label>
+                <label>Time</label>
                 <input  type="datetime-local" th:field="*{time}" step="1">
             </div>
-            <!--<div>
-                <label>Goals</label>
-                <input type="number" th:field="*type}">
-            </div>-->
             <div>
-                <input type="hidden" th:field="*{match}">
+                <label>Type</label>
+                <input type="number" th:field="*{type}" min="1" max="6">
+            </div>
+                        <!-- NÃO É NECESSARIO--->
+            <div>
+                <input type="hidden" th:field="*{match}" min="1" max="6">
+            </div>
+
+            
+            <div>
+                <label>Team</label>
+                <select id="teams" th:field="*{team}">
+                    <option value="" th:text="------">
+                    </option>
+                    <option th:each="t: ${allTeams}" th:value="${{t.id}}" th:text="${t.name}">
+                    </option>
+                   
+                </select>
             </div>
             <div>
-            <button type="submit">Edit/Create Player</button>
+                <label>Player</label>
+                <select id="players" th:field="*{player}">
+                    <option value="" th:text="------">
+                    </option>
+                    <option th:each="p : ${allPlayers}" th:value="${{p.id}}" th:text="${p.name}">
+                    </option>
+                   
+                </select>
+            </div>
+            <div>
+                <BR>
+            <button type="submit">Create Event</button>
             </div>
         </div>
     </form>
