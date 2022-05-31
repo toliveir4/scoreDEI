@@ -12,7 +12,29 @@
         <meta charset="utf8"/>
     </head>
     <body>
-        <h1>List of Matches</h1>
+      <nav class="navbar navbar-expand-lg navbar-dark" style="padding-top:0; padding-bottom:0">
+        <div class="container-fluid" style="padding-right:0; margin-bottom:2px">
+          <a class="navbar-brand" href="@{/home}"
+            style=" display: inline-flex;font-size:34px; margin-top: -10px;font-family: 'Varela Round';">
+      
+            <i class="fa fa-soccer-ball-o" style="font-size: 48px;color:white; rotate: 60deg; margin-top:9px"></i>
+            <h2
+              style="display: inline-flex; font-family:'Varela Round',sans-serif;font-size: 36px;margin-top: 20px;margin-bottom:-10px;margin-left: 5px;">
+              <b>scoreDEI</b>
+            </h2>
+          </a>
+          <ul class="menu">
+            <li><a th:href="@{/hello}">Home</a></li>
+            <li><a th:href="@{/listPlayers}">List of Players</a></li>
+            <li><a th:href="@{/listTeams}">List of Teams</a></li>
+            <li><a class="active">List of Matches</a></li>
+            <li><a th:href="@{/listUsers}">List of Users</a></li>
+            <li><a th:href="@{/login?logout}">Sign Out</a></li>
+          </ul>
+        </div>
+      </nav>
+
+        <h1 align="center">List of Matches</h1>
         <table class="table">
           <thead>
           <tr>
