@@ -10,7 +10,7 @@ import com.example.data.Team;
 
 import com.example.data.Match;
 import com.example.data.WebUser;
-import com.example.data.WebUser;
+import com.example.data.Event;
 
 import com.example.data.WebUserDTO;
 import com.example.formdata.FormData;
@@ -35,6 +35,10 @@ public class DataController {
 
     @Autowired
     WebUserService userService;
+
+    @Autowired
+    EventService eventService;
+
 
     @Autowired
     WebSecurityConfig securityService;
@@ -107,6 +111,15 @@ public class DataController {
 
         for (Match m : match)
             this.matchService.addMatch(m);
+
+
+        Event[] event = {
+                new Event("title1", "info1","86:02", 1),
+                new Event("title2", "info2", "90:01",1),
+        };
+
+        for (Event e : event)
+            this.eventService.addEvent(e);
 
         return "redirect:/listPlayers";
     }
@@ -226,15 +239,41 @@ public class DataController {
         return "listMatchs";
     }
 
-    @GetMapping("/Match")
+    @GetMapping("/match")
     public String match(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Match> op = this.matchService.getMatch(id);
         if (op.isPresent()) {
             m.addAttribute("match", op.get());
-            return "Match";
+            return "match";
         } else {
-            return "redirect:/listStudents";
+            return "redirect:/listMatchs";
         }
     }
+    @GetMapping("/createEvent")
+    public String createEvent(@RequestParam(name = "id", required = true) int id, Model m) {
+        Optional<Match> op = this.matchService.getMatch(id);
+        if (op.isPresent()) {
+            Match match =op.get();
+            Event event =new Event(match.getName(),"info1","86:02", 1);
+            event.setMatch(match);
+            m.addAttribute("event",event);
+            // saveEvent
+            //this.eventService.addEvent(event);
+            return "createEvent";
+        } else {
+            return "redirect:/listMatchs";
+        }
+    }
+    @GetMapping("/saveEvent")
+    public String saveEvent(@ModelAttribute Event event, Model m) {
+        try {
+            this.eventService.addEvent(event);
+            
+        } catch (Exception e) {
+            return "redirect:/listMatchs";
+        }
+        return match(event.getMatch().getId(), m);
+    }
+
 
 }

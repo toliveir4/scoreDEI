@@ -1,0 +1,32 @@
+<div >
+    <form th:action="@{/saveEvent}" th:object="${event}">
+        <div="form-row">
+            <div>
+                <input type="hidden" th:field="*{id}">
+            </div>
+            <div>
+                <label>Name</label>
+                <input type="text" th:field="*{title}">
+            </div>
+            <div>
+                <label>Position</label>
+                <input type="text" th:field="*{info}">
+            </div>
+            <div>
+                <label>Goals</label>
+                <input  type="datetime-local" th:field="*{time}" step="1">
+            </div>
+            <!--<div>
+                <label>Goals</label>
+                <input type="number" th:field="*type}">
+            </div>-->
+            <div>
+                <input type="hidden" th:field="*{match}">
+            </div>
+            <div>
+            <button type="submit">Edit/Create Player</button>
+            </div>
+        </div>
+    </form>
+<a>hola yo soy DORA!</a>
+</div>

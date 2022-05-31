@@ -22,7 +22,7 @@ public class EventService
         return userRecords;    
     }
 
-    public void addUser(Event User)  
+    public void addEvent(Event User)  
     {    
         eventRepository.save(User);    
     }

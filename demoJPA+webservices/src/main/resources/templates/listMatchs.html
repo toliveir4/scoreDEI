@@ -21,19 +21,21 @@
             <th>SCORE</th>
             <th>DATE</th>
           </tr>
-            <tr    th:each="m : ${matchs}"  class='clickable-row' onclick=" window.open('@{match(id=${m.id})}','_blank')" >
+           <!--- <tr th:each="m : ${matchs}"  class='clickable-row' th:href="  window.open('@{match(id=${m.id})}','_blank')" > -->
+           
+            <tr th:each="m : ${matchs}"  class='clickable-row'>  
             <td th:text="${m.id}">id</td>
             <td th:text="${m.name}">name</td>
             <td th:text="${m.score}">score</td>
             <td th:text="${m.date}">date</td>
-            <td ><a th:href="@{match(id=${m.id})}"> aaaa</a></td>
-              </tr>
-            
+            <td ><a th:href="@{match(id=${m.id})}">ooooo</a></td>
+            </form>
+            </tr>
+           
           </thead>
         </table>
     
     </body>
 <style>
-[data-href] { cursor: pointer; }
 </style>
 </html>
