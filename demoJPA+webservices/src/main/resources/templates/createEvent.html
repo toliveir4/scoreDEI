@@ -1,5 +1,5 @@
 <div >
-    <form th:action="@{/saveEvent}" th:object="${event}">
+    <form th:action="@{/saveEvent}" th:object="${event}" method="put">
         <div="form-row">
             <div>
                 <input type="hidden" th:field="*{id}">
