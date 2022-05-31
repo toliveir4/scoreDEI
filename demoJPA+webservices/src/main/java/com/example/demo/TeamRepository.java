@@ -36,4 +36,28 @@ public interface TeamRepository extends CrudRepository<Team, Integer> {
     @Modifying
     @Query("update Team t set t.defeats = t.defeats + 1 where t.name like :name")
     void addDefeat(String name);
+
+    @Query("select t from Team t order by t.games asc")
+    List<Team> orderByGamesASC();
+
+    @Query("select t from Team t order by t.games desc")
+    List<Team> orderByGamesDESC();
+
+    @Query("select t from Team t order by t.wins asc")
+    List<Team> orderByWinsASC();
+
+    @Query("select t from Team t order by t.wins desc")
+    List<Team> orderByWinsDESC();
+
+    @Query("select t from Team t order by t.draws asc")
+    List<Team> orderByDrawsASC();
+
+    @Query("select t from Team t order by t.draws desc")
+    List<Team> orderByDrawsDESC();
+
+    @Query("select t from Team t order by t.defeats asc")
+    List<Team> orderByDefeatsASC();
+
+    @Query("select t from Team t order by t.defeats desc")
+    List<Team> orderByDefeatsDESC();
 } 

@@ -16,6 +16,20 @@ public class TeamService {
     @Autowired
     private TeamRepository teamRepository;
 
+    public List<String> getOptions() {
+        List<String> options = new ArrayList<String>();
+        options.add("Most Games");
+        options.add("Least Games");
+        options.add("Most Wins");
+        options.add("Least Wins");
+        options.add("Most Draws");
+        options.add("Least Draws");
+        options.add("Most Defeats");
+        options.add("Least Defeats");
+        
+        return options;
+    }
+
     public List<Team> getAllTeams() {
         List<Team> userRecords = new ArrayList<>();
         teamRepository.findAll().forEach(userRecords::add);
@@ -30,5 +44,4 @@ public class TeamService {
     public Optional<Team> getTeam(int id) {
         return teamRepository.findById(id);
     }
-
 }

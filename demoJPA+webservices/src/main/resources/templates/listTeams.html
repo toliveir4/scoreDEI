@@ -22,7 +22,7 @@
     <div class="container-fluid" style="padding-right:0; margin-bottom:2px">
       <a class="navbar-brand" href="@{/home}"
         style=" display: inline-flex;font-size:34px; margin-top: -10px;font-family: 'Varela Round';">
-    
+
         <i class="fa fa-soccer-ball-o" style="font-size: 48px;color:white; rotate: 60deg; margin-top:9px"></i>
         <h2
           style="display: inline-flex; font-family:'Varela Round',sans-serif;font-size: 36px;margin-top: 20px;margin-bottom:-10px;margin-left: 5px;">
@@ -48,10 +48,11 @@
       <tr>
         <th>ID</th>
         <th>NAME</th>
-        <th>GAMES</th>
-        <th>WINS</th>
-        <th>DRAWS</th>
-        <th>DEFEATS</th>
+        <th><a th:href="@{'/listTeams?field=games&order=' + ${reverseSort}}">GAMES</a></th>
+        <th><a th:href="@{'/listTeams?field=wins&order=' + ${reverseSort}}">WINS</a></th>
+        <th><a th:href="@{'/listTeams?field=draws&order=' + ${reverseSort}}">DRAWS</a></th>
+        <th><a th:href="@{'/listTeams?field=defeats&order=' + ${reverseSort}}">DEFEATS</a></th>
+        <th>BEST SCORER</th>
         <th>EDIT</th>
       </tr>
       <tr th:each="t : ${teams}">
@@ -61,6 +62,7 @@
         <td th:text="${t.wins}">wins</td>
         <td th:text="${t.draws}">draws</td>
         <td th:text="${t.defeats}">defeats</td>
+        <td th:text="${t.bestScorer}">best_scorer</td>
         <td><a th:href="@{editTeam(id=${t.id})}">here</a></td>
       </tr>
     </thead>

@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -13,7 +14,6 @@ import com.example.data.WebUser;
 import com.example.data.Event;
 import java.util.Date;
 
-import com.example.data.WebUserDTO;
 import com.example.formdata.FormData;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -109,16 +110,15 @@ public class DataController {
                 new Player("Palhinha", "CDM", "9-7-1995")
         };
 
-        myPlayers[0].setTeam(myTeams[0]);
         myPlayers[0].setTeam(myTeams[1]);
-        myPlayers[1].setTeam(myTeams[1]);
         myPlayers[1].setTeam(myTeams[2]);
         myPlayers[2].setTeam(myTeams[0]);
         myPlayers[3].setTeam(myTeams[2]);
         myPlayers[4].setTeam(myTeams[1]);
         myPlayers[5].setTeam(myTeams[0]);
-        myPlayers[5].setTeam(myTeams[1]);
-        myPlayers[5].setTeam(myTeams[2]);
+
+        for (Team t : myTeams)
+            t.setBestScorer(myPlayers[2].getName());
 
         for (Player p : myPlayers)
             this.playerService.addPlayer(p);
@@ -189,7 +189,36 @@ public class DataController {
 
     @GetMapping("/listTeams")
     public String listTeams(Model model) {
+        model.addAttribute("reverseSort", "asc");
         model.addAttribute("teams", this.teamService.getAllTeams());
+        return "listTeams";
+    }
+
+    @GetMapping("/listTeams?field={field}order={order}")
+    public String orderTeams(Model m, 
+            @RequestParam(name = "field") String field, @RequestParam(name = "order") String order) {
+            
+        m.addAttribute("field", field);
+        m.addAttribute("order", order);
+        m.addAttribute("reverseSort", order.equals("asc") ? "desc" : "asc");
+    
+        if (order.equals("asc") && field.equals("games"))
+            m.addAttribute("teams", this.teamService.getAllTeams());
+        else if (order.equals("desc") && field.equals("games"))
+            m.addAttribute("teams", this.teamService.getAllTeams());
+        else if (order.equals("asc") && field.equals("wins"))
+            m.addAttribute("teams", this.teamService.getAllTeams());
+        else if (order.equals("desc") && field.equals("wins"))
+            m.addAttribute("teams", this.teamService.getAllTeams());
+        else if (order.equals("asc") && field.equals("draws"))
+            m.addAttribute("teams", this.teamService.getAllTeams());
+        else if (order.equals("desc") && field.equals("draws"))
+            m.addAttribute("teams", this.teamService.getAllTeams());
+        else if (order.equals("asc") && field.equals("defeats"))
+            m.addAttribute("teams", this.teamService.getAllTeams());
+        else if (order.equals("desc") && field.equals("defeats"))
+            m.addAttribute("teams", this.teamService.getAllTeams());
+
         return "listTeams";
     }
 

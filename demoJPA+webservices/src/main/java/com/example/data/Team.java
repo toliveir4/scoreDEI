@@ -8,24 +8,30 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 @Entity
 @JsonIgnoreProperties({ "players" })
 @XmlRootElement
+@Table(name = "teams")
 public class Team {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    //private File img;
+    // private File img;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Player> players;
     private int wins, draws, defeats, games;
 
-    public Team() {}
+    private String bestScorer;
+
+    public Team() {
+    }
 
     public Team(String name, int games, int wins, int draws, int defeats) {
         this.name = name;
@@ -89,6 +95,14 @@ public class Team {
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public String getBestScorer() {
+        return bestScorer;
+    }
+
+    public void setBestScorer(String bestScorer) {
+        this.bestScorer = bestScorer;
     }
 
     public String toString() {

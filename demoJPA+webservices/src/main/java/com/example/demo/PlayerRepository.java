@@ -43,4 +43,19 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
     @Query("update Player p set p.team = :team where p.name like :name")
     void updateTeam(Team team, String name);
 
+    @Query("select p from Player p order by p.name asc")
+    List<Player> orderByNameASC();
+
+    @Query("select p from Player p order by p.name desc")
+    List<Player> orderByNameDESC();
+
+    @Query("select p from Player p order by p.goals asc")
+    List<Player> orderByGoalsASC();
+
+    @Query("select p from Player p order by p.goals desc")
+    List<Player> orderByGoalsDESC();
+
+    @Query("select p from Player p where p.team.name = :t")
+    List<Player> selectPlayersByTeam(String t);
+
 }    
