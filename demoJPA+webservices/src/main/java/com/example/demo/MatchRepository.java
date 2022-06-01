@@ -24,8 +24,8 @@ public interface MatchRepository extends CrudRepository <Match, Integer> {
 
     @Transactional
     @Modifying
-    @Query("update Match m set m.score = ?1 where id = :id")
-    void updateScore(String score);
+    @Query("update Match m set m.score = :score where id = :id")
+    void updateScore(String score, int id);
 
     @Transactional
     @Modifying
