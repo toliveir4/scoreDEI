@@ -40,6 +40,11 @@ public class DataController {
     @Autowired
     TeamRepository teamRepository;
 
+
+    @Autowired
+    MatchRepository matchRepository;
+    
+
     @Autowired
     MatchService matchService;
 
@@ -204,7 +209,10 @@ public class DataController {
             Event event = new Event(match.getName(), "info1", "86:02", 1);
             event.setMatch(match);
             m.addAttribute("event", event);
-            m.addAttribute("allTeams", this.teamService.getAllTeams());
+            List<Team> a = new ArrayList<Team>();
+            a.add(this.teamService.getTeam(match.getHome().getId()).get());
+            a.add(this.teamService.getTeam(match.getAway().getId()).get());
+            m.addAttribute("allTeams", a);
             m.addAttribute("allPlayers", this.playerService.getAllPlayers());
             // saveEvent
             // this.eventService.addEvent(event);
@@ -223,23 +231,39 @@ public class DataController {
                 case 1:{
                     //inicio do jogo
                     //System.out.println("aaaaa-a--aaa");
-                    if(this.matchService.getMatch(event.getMatch().getId()).get().getStatus()!=1)
-                        this.matchService.updateStatus(event.getMatch().getId(), 1);
-                    else
-                        this.matchService.updateStatus(event.getMatch().getId(), 2);
+                    if(this.matchService.getMatch(event.getMatch().getId()).get().getStatus()!=1){
+                        this.teamRepository.addGame(event.getMatch().getAway().getName());
+                        this.teamRepository.addGame(event.getMatch().getHome().getName());
+                        this.matchService.updateStatus(event.getMatch().getId(), 1);}
+                    else{
+                        if(event.getMatch().getScoreAway()>event.getMatch().getScoreHome()){
+                            this.teamRepository.addDefeat(event.getMatch().getHome().getName());
+                            this.teamRepository.addWin(event.getMatch().getHome().getName());}
+                        else if(event.getMatch().getScoreAway()>event.getMatch().getScoreHome()){
+                            this.teamRepository.addDefeat(event.getMatch().getAway().getName());
+                            this.teamRepository.addWin(event.getMatch().getHome().getName());}
+                        else{
+                            this.teamRepository.addDraw(event.getMatch().getAway().getName());
+                            this.teamRepository.addDraw(event.getMatch().getHome().getName());}
+                    
+                        this.matchService.updateStatus(event.getMatch().getId(), 2);}
                     break;
                 }
                 case 2:{
                      // 
                         this.playerService.addGoal(event.getPlayer().getName());
                         //adicionar golos ao match 
+                        if(event.getMatch().getHome().getId()==event.getTeam().getId())
+                             this.matchRepository.addHomeGoal(event.getId());
+                        else
+                            this.matchRepository.addAwayGoal(event.getId());
+                            this.matchRepository.updateScore((event.getMatch().getScoreHome()+"-"+event.getMatch().getScoreAway()));
                     break;}
                 case 3:{
                      // 
                         this.playerService.addYellowCard(event.getPlayer().getName());
                     break;}
                 case 4:{
-                     // 
                         this.playerService.addRedCard(event.getPlayer().getName());
                     break;}
                 case 5:{
