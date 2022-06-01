@@ -44,4 +44,36 @@ public class TeamService {
     public Optional<Team> getTeam(int id) {
         return teamRepository.findById(id);
     }
+
+    List<Team> orderByGamesASC() {
+        return teamRepository.orderByGamesASC();
+    }
+
+    List<Team> orderByGamesDESC() {
+        return teamRepository.orderByGamesDESC();
+    }
+
+    List<Team> orderByWinsASC() {
+        return teamRepository.orderByWinsASC();
+    }
+
+    List<Team> orderByWinsDESC() {
+        return teamRepository.orderByWinsDESC();
+    }
+
+    List<Team> orderByDrawsASC() {
+        return teamRepository.orderByDrawsASC();
+    }
+
+    List<Team> orderByDrawsDESC() {
+        return teamRepository.orderByDrawsDESC();
+    }
+
+    List<Team> orderByDefeatsASC() {
+        return teamRepository.orderByDefeatsASC();
+    }
+
+    List<Team> orderByDefeatsDESC() {
+        return teamRepository.orderByDefeatsDESC();
+    }
 }

@@ -43,11 +43,6 @@
 
   <h1 align="center">List of Players</h1>
 
-  <p> Order by: 
-    <select name="" id="">
-      <option value=""></option>
-    </select>
-  </p>
   <table class="table">
     <thead>
       <tr>
@@ -56,7 +51,7 @@
         <th><a th:href="@{orderPlayers(order=${order},field=goals)}">GOALS</a></th>
         <th>BIRTHDAY</th>
         <th>CHANGE</th>
-        <th><a th:href="@{'/listPlayers?field=team'}">TEAM</a></th>
+        <th>TEAM</th>
       </tr>
       <tr th:each="s : ${players}">
         <td th:text="${s.name}">name</td>

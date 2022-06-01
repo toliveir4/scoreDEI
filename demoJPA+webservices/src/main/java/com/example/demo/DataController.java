@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class DataController {
+    private final static Logger logger = LoggerFactory.getLogger(DataController.class);
 
     @Autowired
     TeamService teamService;
@@ -153,20 +157,22 @@ public class DataController {
         model.addAttribute("order", "asc");
         return "listPlayers";
     }
+
     @GetMapping("orderPlayers")
-    public String orderPlayers(Model m, 
-            @RequestParam(name = "field",required=true) String field, @RequestParam(name = "order",required=true) String order) {
+    public String orderPlayers(Model m,
+            @RequestParam(name = "field", required = true) String field,
+            @RequestParam(name = "order", required = true) String order) {
         m.addAttribute("field", field);
         m.addAttribute("order", order.equals("asc") ? "desc" : "asc");
-    
+
         if (order.equals("asc") && field.equals("name"))
-            m.addAttribute("players", this.playerService.getAllPlayersOrderByNameASC());
+            m.addAttribute("players", this.playerService.orderByNameASC());
         else if (order.equals("desc") && field.equals("name"))
-            m.addAttribute("players",this.playerService.getAllPlayersOrderByNameDESC());
+            m.addAttribute("players", this.playerService.orderByNameDESC());
         else if (order.equals("asc") && field.equals("goals"))
-            m.addAttribute("players", this.playerService.getAllPlayersOrderByGoalsASC());
+            m.addAttribute("players", this.playerService.orderByGoalsASC());
         else if (order.equals("desc") && field.equals("goals"))
-            m.addAttribute("players", this.playerService.getAllPlayersOrderByGoalsDESC());
+            m.addAttribute("players", this.playerService.orderByGoalsDESC());
         return "listPlayers";
     }
 
@@ -210,36 +216,37 @@ public class DataController {
     }
 
     @GetMapping("/listTeams")
-    public String listTeams(Model model) {
-        model.addAttribute("field", "wins");
-        model.addAttribute("order", "asc");
-        model.addAttribute("teams", this.teamService.getAllTeams());
-        return "listTeams";
-    }
+    public String listTeams(Model m,
+            @RequestParam(name = "field", required = false) String field,
+            @RequestParam(name = "order", required = false, defaultValue = "asc") String order) {
 
-    @GetMapping("orderTeams")
-    public String orderTeams(Model m, 
-            @RequestParam(name = "field",required=true) String field, @RequestParam(name = "order",required=true) String order) {
-        order=order.equals("asc") ? "desc" : "asc";
+        logger.info("ENTROU NO ORDER TEAMS");
+
+        if (field == null) {
+            m.addAttribute("teams", this.teamService.getAllTeams());
+            return "listTeams";
+        }
+
+        order = order.equals("asc") ? "desc" : "asc";
         m.addAttribute("field", field);
         m.addAttribute("order", order);
-    
+
         if (order.equals("asc") && field.equals("games"))
-            m.addAttribute("teams", this.teamRepository.orderByGamesASC());
+            m.addAttribute("teams", this.teamService.orderByGamesASC());
         else if (order.equals("desc") && field.equals("games"))
-            m.addAttribute("teams",this.teamRepository.orderByGamesDESC());
+            m.addAttribute("teams", this.teamService.orderByGamesDESC());
         else if (order.equals("asc") && field.equals("wins"))
-            m.addAttribute("teams", this.teamRepository.orderByWinsASC());
+            m.addAttribute("teams", this.teamService.orderByWinsASC());
         else if (order.equals("desc") && field.equals("wins"))
-            m.addAttribute("teams", this.teamRepository.orderByWinsDESC());
+            m.addAttribute("teams", this.teamService.orderByWinsDESC());
         else if (order.equals("asc") && field.equals("draws"))
-            m.addAttribute("teams", this.teamRepository.orderByDrawsASC());
+            m.addAttribute("teams", this.teamService.orderByDrawsASC());
         else if (order.equals("desc") && field.equals("draws"))
-            m.addAttribute("teams", this.teamRepository.orderByDrawsDESC());
+            m.addAttribute("teams", this.teamService.orderByDrawsDESC());
         else if (order.equals("asc") && field.equals("defeats"))
-            m.addAttribute("teams", this.teamRepository.orderByDefeatsASC());
+            m.addAttribute("teams", this.teamService.orderByDefeatsASC());
         else if (order.equals("desc") && field.equals("defeats"))
-            m.addAttribute("teams", this.teamRepository.orderByDefeatsDESC());
+            m.addAttribute("teams", this.teamService.orderByDefeatsDESC());
 
         return "listTeams";
     }
@@ -312,7 +319,7 @@ public class DataController {
     public String match(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Match> op = this.matchService.getMatch(id);
         if (op.isPresent()) {
-            m.addAttribute("events",eventRepository.getEventsFromMatch(op.get()));
+            m.addAttribute("events", eventRepository.getEventsFromMatch(op.get()));
             m.addAttribute("match", op.get());
             return "match";
         } else {
@@ -324,7 +331,7 @@ public class DataController {
     public String createEvent(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Match> op = this.matchService.getMatch(id);
         if (op.isPresent()) {
-            
+
             Match match = op.get();
             Event event = new Event(match.getName(), "info1", "86:02", 1);
             event.setMatch(match);
@@ -344,14 +351,14 @@ public class DataController {
         try {
             event.setTime(new Date());
             this.eventService.addEvent(event);
-            if(event.getType()==2){
-                //atualizar o numero de golos
+            if (event.getType() == 2) {
+                // atualizar o numero de golos
             }
 
         } catch (Exception e) {
             return "redirect:/listMatches";
         }
-        return "redirect:/match?id="+event.getMatch().getId();
+        return "redirect:/match?id=" + event.getMatch().getId();
     }
 
 }
