@@ -47,7 +47,7 @@
             <th>SCORE</th>
             <th>STATUS</th>
             <th>DATE</th>
-            <th>EDIT</th>
+            <th>INFO</th>
           </tr>
            <!--- <tr th:each="m : ${matchs}"  class='clickable-row' th:href="  window.open('@{match(id=${m.id})}','_blank')" > -->
             <tr th:each="m : ${matches}"  class='clickable-row'>  
@@ -56,7 +56,7 @@
             <td th:text="${m.score}">score</td>
             <td th:text="${m.status}">status</td>
             <td th:text="${m.date}">date</td>
-            <td ><a th:href="@{match(id=${m.id})}">edit</a></td>
+            <td ><a th:href="@{match(id=${m.id})}">More</a></td>
             </tr>
            
           </thead>

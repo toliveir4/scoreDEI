@@ -97,10 +97,12 @@ public class AdminController {
                     arr.get(0).getJSONObject("team").getString("logo"));
             
             Team check = this.teamService.findByName(tt.getName());
+            List<Team> check = this.teamService.findByName(tt.getName());
 
             if (check == null)
+            if (check.isEmpty())
                 this.teamService.addTeam(tt);
-            else tt = check;
+            else tt = check.get(0);
 
             String position = arr.get(0).getJSONObject("games").getString("position");
             

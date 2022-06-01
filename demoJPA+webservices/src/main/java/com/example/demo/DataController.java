@@ -219,10 +219,37 @@ public class DataController {
         try {
             event.setTime(new Date());
             this.eventService.addEvent(event);
-            if (event.getType() == 2) {
-                // atualizar o numero de golos
+            switch(event.getType()){
+                case 1:{
+                    //inicio do jogo
+                    //System.out.println("aaaaa-a--aaa");
+                    if(this.matchService.getMatch(event.getMatch().getId()).get().getStatus()!=1)
+                        this.matchService.updateStatus(event.getMatch().getId(), 1);
+                    else
+                        this.matchService.updateStatus(event.getMatch().getId(), 2);
+                    break;
+                }
+                case 2:{
+                     // 
+                        this.playerService.addGoal(event.getPlayer().getName());
+                        //adicionar golos ao match 
+                    break;}
+                case 3:{
+                     // 
+                        this.playerService.addYellowCard(event.getPlayer().getName());
+                    break;}
+                case 4:{
+                     // 
+                        this.playerService.addRedCard(event.getPlayer().getName());
+                    break;}
+                case 5:{
+                        this.matchService.updateStatus(event.getMatch().getId(), 5);
+                    break;}
+                case 6:{
+                       this.matchService.updateStatus(event.getMatch().getId(), 6);
+                    break;}
             }
-
+            
         } catch (Exception e) {
             return "redirect:/listMatches";
         }
