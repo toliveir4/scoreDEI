@@ -1,10 +1,13 @@
 package com.example.demo;
 
+import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.example.data.Event;
@@ -18,20 +21,24 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-
 public class DataController {
     private final static Logger logger = LoggerFactory.getLogger(DataController.class);
 
@@ -59,18 +66,17 @@ public class DataController {
     @Autowired
     WebSecurityConfig securityService;
 
+
     @GetMapping("/")
     public String redirect() {
         securityService.userDetailsService(userService.getAllUsers());
         return "redirect:/home";
     }
-
     @GetMapping("/admin")
     public String admin() {
         securityService.userDetailsService(userService.getAllUsers());
-        return "redirect:/admin/home";
+        return "redirect:/admin/hello";
     }
-
 
     @GetMapping("/loadData")
     public String loadData() throws UnirestException {
@@ -295,7 +301,7 @@ public class DataController {
     private String saveUser(@ModelAttribute @Valid WebUser u, Model m) {
         try {
             userService.addUser(u);
-            securityService.userDetailsService(u.getUsername(), u.getPassword());
+            securityService.userDetailsService(u.getUsername(), u.getPassword(),u.getAdmin());
 
         } catch (Exception e) {
             m.addAttribute("error", "Username taken!");
@@ -305,11 +311,6 @@ public class DataController {
         return "redirect:/login";
     }
 
-    @GetMapping("/listUsers")
-    public String listUsers(Model model) {
-        model.addAttribute("web_user", this.userService.getAllUsers());
-        return "listUsers";
-    }
 
     @GetMapping("/listMatches")
     public String listMatches(Model model) {
@@ -353,34 +354,14 @@ public class DataController {
         try {
             event.setTime(new Date());
             this.eventService.addEvent(event);
-            switch(event.getType()){
-                case 1:{
-
-                    //inicio do jogo
-                    break;
-                }
-                case 2:{
-                     // 
-                    break;}
-                case 3:{
-                     // 
-                    break;}
-                case 4:{
-                     // 
-                    break;}
-                case 5:{
-                     // 
-                    break;}
-                case 6:{
-                     // 
-                    break;}
+            if (event.getType() == 2) {
+                // atualizar o numero de golos
             }
-            
 
         } catch (Exception e) {
             return "redirect:/listMatches";
         }
         return "redirect:/match?id=" + event.getMatch().getId();
     }
-
+    
 }

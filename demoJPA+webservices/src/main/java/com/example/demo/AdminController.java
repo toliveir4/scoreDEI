@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,13 +64,93 @@ public class AdminController {
 
 
     //private final static Logger logger = LoggerFactory.getLogger(AdminController.class);
+
+    @GetMapping("/loadData")
+    public String loadData() throws UnirestException {
+        String URL = "https://v3.football.api-sports.io/";
+        // Premier League 2021
+        String ENDPOINT = "players?league=39&season=2021";
+        String API_KEY = "6dbe15bb3475e04f108b39b89b365672";
+
+        HttpResponse<JsonNode> responsePlayers = Unirest.get(URL + ENDPOINT)
+                .header("x-rapidapi-key", API_KEY)
+                .header("x-rapidapi-host", "v3.football.api-sports.io")
+                .asJson();
+
+        JSONArray playersBody = responsePlayers.getBody().getObject().getJSONArray("response");
+
+        ArrayList<JSONObject> arrays = new ArrayList<JSONObject>();
+        for (int i = 0; i < playersBody.length(); i++)
+            arrays.add(playersBody.getJSONObject(i));
+        
+        for (int p = 0; p < arrays.size(); p++) {
+            String name = arrays.get(p).getJSONObject("player").getString("name");
+            String birth = arrays.get(p).getJSONObject("player").getJSONObject("birth").optString("date", "2001-10-14");
+
+            JSONArray pArr = arrays.get(p).optJSONArray("statistics");
+            ArrayList<JSONObject> arr = new ArrayList<JSONObject>();
+            arr.add(pArr.getJSONObject(0));
+
+            
+            Team tt = new Team(arr.get(0).getJSONObject("team").getString("name"), 
+                    arr.get(0).getJSONObject("team").getString("logo"));
+            
+            List<Team> check = this.teamService.findByName(tt.getName());
+
+            if (check.isEmpty())
+                this.teamService.addTeam(tt);
+            else tt = check.get(0);
+
+            String position = arr.get(0).getJSONObject("games").getString("position");
+            
+            Player newP = new Player(name, position, birth);
+            this.playerService.addPlayer(newP);
+            newP.setTeam(tt);
+        }
+
+        // TODO isto vai saltar fora, apenas está a servir como ajuda
+        WebUser[] users = {
+
+                new WebUser("user", "pass"),
+                new WebUser("tmatos", "adeus"),
+                new WebUser("user1", "pass1"),
+                new WebUser("user2", "pass2"),
+                new WebUser("user3", "pass3"),
+        };
+
+        for (WebUser u : users) {
+            try {
+                this.userService.addUser(u);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        Match[] match = {
+                  new Match("user vs a", "2-1", "22-12-2020 15:30", 1),
+                new Match("tmatos vs user", "2-3", "22-12-2020 12:30", 1),
+        };
+
+        for (Match m : match)
+            this.matchService.addMatch(m);
+
+        Event[] event = {
+                new Event("title1", "info1", "86:02", 1),
+                new Event("title2", "info2", "90:01", 1),
+        };
+
+        for (Event e : event)
+            this.eventService.addEvent(e);
+
+        return "redirect:/admin/listPlayers";
+    }
   
-    @GetMapping("home")
-    public String home(Model model) {
+    @GetMapping("hello")
+    public String hello(Model model) {
         model.addAttribute("players", this.playerService.getAllPlayers());
         model.addAttribute("field", "name");
         model.addAttribute("order", "asc");
-        return "admin/home";
+        return "admin/hello";
     }
     
     @GetMapping("/listPlayers")
@@ -78,12 +160,6 @@ public class AdminController {
         model.addAttribute("field", "name");
         model.addAttribute("order", "asc");
         return "admin/listPlayers";
-    }
-
-    @GetMapping("/login")
-    public String adminlogin() {
-        securityService.userDetailsService(userService.getAllUsers());
-        return "admin/login";
     }
     @GetMapping("/listTeams")
     public String listTeams(Model m,
@@ -147,17 +223,17 @@ public class AdminController {
 
    
 
-    @GetMapping("/signup")
+    @GetMapping("/createUser")
     private String signUp(Model m) {
         m.addAttribute("web_user", new WebUser());
-        return "signup";
+        return "admin/createUser";
     }
 
     @PostMapping("/saveUser")
     private String saveUser(@ModelAttribute @Valid WebUser u, Model m) {
         try {
             userService.addUser(u);
-            securityService.userDetailsService(u.getUsername(), u.getPassword());
+            securityService.userDetailsService(u.getUsername(), u.getPassword(),u.getAdmin());
 
         } catch (Exception e) {
             m.addAttribute("error", "Username taken!");
@@ -187,7 +263,7 @@ public class AdminController {
             m.addAttribute("match", op.get());
             return "match";
         } else {
-            return "redirect:admin//listMatches";
+            return "redirect:admin/listMatches";
         }
     }
 
@@ -244,6 +320,7 @@ public class AdminController {
         }
         return "redirect:admin/match?id=" + event.getMatch().getId();
     }
+    
 
 
 }

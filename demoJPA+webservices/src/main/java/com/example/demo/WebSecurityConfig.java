@@ -50,12 +50,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 * super ();
 	 * }
 	 */
-
+@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
 				.antMatchers("/admin/**").hasRole("ADMIN")
-				.antMatchers("/", "/home", "/signup", "/saveUser", "/style.css","/admin","/admin/home","/admin/login").permitAll()
+				.antMatchers("/", "/home", "/signup", "/saveUser", "/style.css").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.defaultSuccessUrl("/hello")
 				.permitAll()
 				.and()
-				.logout().logoutUrl("/login?logout")
+				.logout()
 				.permitAll();
 				
 	}
@@ -85,10 +85,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public UserDetailsService userDetailsService(List<WebUser> users) {
 		for (int i = 0; i < users.size(); i++) {
 			try {
+				String role;
+				if(users.get(i).getAdmin())
+					 role="ADMIN";
+				else
+					 role="USER";
 				manager.createUser(User.withDefaultPasswordEncoder()
 						.username(users.get(i).getUsername())
 						.password(users.get(i).getPassword())
-						.roles("USER")
+						.roles(role)
 						.build());
 			} catch (Exception e) {
 				;
@@ -97,12 +102,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return manager;
 	}
 
-	public UserDetailsService userDetailsService(String name, String password) {
+	public UserDetailsService userDetailsService(String name, String password,Boolean bRole) {
+		String role;
+		if(bRole)
+			 role="ADMIN";
+		else
+			 role="USER";
 
 		manager.createUser(User.withDefaultPasswordEncoder()
 				.username(name)
 				.password(password)
-				.roles("USER")
+				.roles(role)
 				.build());
 
 		return manager;
