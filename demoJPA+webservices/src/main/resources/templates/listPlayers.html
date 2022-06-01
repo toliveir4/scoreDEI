@@ -49,7 +49,6 @@
         <th>POSITION</th>
         <th><a th:href="@{orderPlayers(order=${order},field=goals)}">GOALS</a></th>
         <th>BIRTHDAY</th>
-        <th>CHANGE</th>
         <th>TEAM</th>
       </tr>
       <tr th:each="s : ${players}">
@@ -57,7 +56,6 @@
         <td th:text="${s.position}">position</td>
         <td th:text="${s.goals}">goals</td>
         <td th:text="${s.birthday}">birthday</td>
-        <td><a th:href="@{editPlayer(id=${s.id})}">here</a></td>
         <td th:text="${s.team}">team</td>
       </tr>
     </thead>

@@ -207,7 +207,7 @@ public class AdminController {
             m.addAttribute("team", op.get());
             return formName;
         }
-        return "redirect:/listTeams";
+        return "redirect:/admin/listTeams";
     }
 
     @GetMapping("/editTeam")

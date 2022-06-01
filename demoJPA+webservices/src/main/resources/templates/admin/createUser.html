@@ -1,38 +1,46 @@
 <html>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-    crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<!-- CSS only -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+    <title>Create User - ADMIN</title>
+</head>
 
 <body style="background-color:#e6eefa; color:white">
-    <div class="w3-center" style="padding-top: 2%; margin-top: 2%; margin-left:30%; margin-right: 30%; padding-bottom: 2%; background-color: #003566; border-radius: 5%; box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.70);">
-        <h1>Sign Up</h1>
+    <div class="w3-center"
+        style="padding-top: 2%; margin-top: 2%; margin-left:30%; margin-right: 30%; padding-bottom: 2%; background-color: #003566; border-radius: 5%; box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.70);">
+        <h1>Create User</h1>
         <form th:action="@{/saveUser}" th:object="${web_user}" method="POST" enctype="utf8">
             <div class="mb-3" align="center">
                 <label>Username: </label>
-                <input th:field="*{Username}" class="form-control" style="width: 50%;"/>
+                <input th:field="*{Username}" class="form-control" style="width: 50%;" />
                 <p th:each="error: ${#fields.errors('Username')}" th:text="${error}">Validation error</p>
             </div>
             <div class="mb-3" align="center">
                 <label>Email: </label>
-                <input type="email" th:field="*{email}" class="form-control" style="width: 50%;"/>
+                <input type="email" th:field="*{email}" class="form-control" style="width: 50%;" />
                 <p th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation error</p>
             </div>
             <div class="mb-3" align="center">
                 <label>Password: </label>
-                <input type="password" th:field="*{password}" class="form-control" style="width: 50%;"/>
+                <input type="password" th:field="*{password}" class="form-control" style="width: 50%;" />
                 <p th:each="error : ${#fields.errors('password')}" th:text="${error}">Validation error</p>
             </div>
             <div class="mb-3" align="center">
                 <label>Confirm password: </label>
-                <input type="password" id="matchingPassword" name="matchingPassword" value="" class="form-control" style="width: 50%;">
+                <input type="password" id="matchingPassword" name="matchingPassword" value="" class="form-control"
+                    style="width: 50%;">
             </div>
             <br>
             <div>
-                <button class="btn btn-success" type="submit" style="padding: 1% 8%; background-color: #008fb7; border-color: #008fb7;">Submit</button>
+                <button class="btn btn-success" type="submit"
+                    style="padding: 1% 8%; background-color: #008fb7; border-color: #008fb7;">Submit</button>
             </div>
         </form>
         <br>

@@ -55,7 +55,6 @@
         <th><a th:href="@{'/listTeams?field=draws&order=' + ${order}}">DRAWS</a></th>
         <th><a th:href="@{'/listTeams?field=defeats&order=' + ${order}}">DEFEATS</a></th>
         <th>BEST SCORER</th>
-        <th>EDIT</th>
       </tr>
       <tr th:each="t : ${teams}">
         <td th:text="${t.name}">name</td>
@@ -64,7 +63,6 @@
         <td th:text="${t.draws}">draws</td>
         <td th:text="${t.defeats}">defeats</td>
         <td th:text="${t.bestScorer}">best_scorer</td>
-        <td><a th:href="@{editTeam(id=${t.id})}">here</a></td>
       </tr>
     </thead>
   </table>

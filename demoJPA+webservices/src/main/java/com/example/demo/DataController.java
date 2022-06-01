@@ -184,45 +184,6 @@ public class DataController {
         return "listPlayers";
     }
 
-    @GetMapping("/createPlayer")
-    public String createPlayer(Model m) {
-        m.addAttribute("player", new Player());
-        m.addAttribute("allTeams", this.teamService.getAllTeams());
-        return "editPlayer";
-    }
-
-    @GetMapping("/editPlayer")
-    public String editPlayer(@RequestParam(name = "id", required = true) int id, Model m) {
-        Optional<Player> op = this.playerService.getPlayer(id);
-        if (op.isPresent()) {
-            m.addAttribute("player", op.get());
-            m.addAttribute("allTeams", this.teamService.getAllTeams());
-            return "editPlayer";
-        } else {
-            return "redirect:/listPlayers";
-        }
-    }
-
-    @PostMapping("/savePlayer")
-    public String savePlayer(@ModelAttribute Player st) {
-        this.playerService.addPlayer(st);
-        return "redirect:/listPlayers";
-    }
-
-    @GetMapping("/queryPlayers")
-    public String queryStudent1(Model m) {
-        m.addAttribute("player", new FormData());
-        return "queryPlayers";
-    }
-
-    /* Note the invocation of a service method that is served by a query in jpql */
-    @GetMapping("/queryResults")
-    public String queryResult1(@ModelAttribute FormData data, Model m) {
-        List<Player> ls = this.playerService.findByNameEndsWith(data.getName());
-        m.addAttribute("players", ls);
-        return "listPlayers";
-    }
-
     @GetMapping("/listTeams")
     public String listTeams(Model m,
             @RequestParam(name = "field", required = false) String field,
@@ -257,32 +218,6 @@ public class DataController {
             m.addAttribute("teams", this.teamService.orderByDefeatsDESC());
 
         return "listTeams";
-    }
-
-    @GetMapping("/createTeam")
-    public String createTeam(Model m) {
-        m.addAttribute("team", new Team());
-        return "editTeam";
-    }
-
-    private String getEditTeamForm(int id, String formName, Model m) {
-        Optional<Team> op = this.teamService.getTeam(id);
-        if (op.isPresent()) {
-            m.addAttribute("team", op.get());
-            return formName;
-        }
-        return "redirect:/listTeams";
-    }
-
-    @GetMapping("/editTeam")
-    public String editTeam(@RequestParam(name = "id", required = true) int id, Model m) {
-        return getEditTeamForm(id, "editTeam", m);
-    }
-
-    @PostMapping("/saveTeam")
-    public String saveTeam(@ModelAttribute Team t) {
-        this.teamService.addTeam(t);
-        return "redirect:/listTeams";
     }
 
     @GetMapping("/login")
