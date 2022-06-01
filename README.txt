@@ -1,11 +1,11 @@
-# ------------------------------ scoreDEI ------------------------------
+------------------------------ scoreDEI ------------------------------
 
-## Pré requisitos para o bom funcionamento do scoreDEI:
+-> Pré requisitos para o bom funcionamento do scoreDEI:
     - Instalar o Docker Desktop;
     - Ter um browser instalado;
     - Software adequado para visualizar e editar ficheiros ".java" e ".html", entre outros, tais como o Visual Studio Code.
 
-## Guia de instalação da plataforma scoreDEI:
+-> Guia de instalação da plataforma scoreDEI:
     - Abrir o Docker Desktop;
     - Abrir o Visual Studio Code, ou outro IDE, na pasta do código fonte (pasta scoreDEI). 
     - Após o container carregar completamente irá aparecer um pop-up onde irá dizer "Reabrir no Container";
