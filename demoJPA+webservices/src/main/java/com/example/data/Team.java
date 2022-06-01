@@ -23,7 +23,7 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    // private File img;
+    private String logo;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Player> players;
     private int wins, draws, defeats, games;
@@ -33,12 +33,9 @@ public class Team {
     public Team() {
     }
 
-    public Team(String name, int games, int wins, int draws, int defeats) {
+    public Team(String name, String logo) {
         this.name = name;
-        this.games = games;
-        this.wins = wins;
-        this.draws = draws;
-        this.defeats = defeats;
+        this.logo = logo;
     }
 
     public int getId() {
@@ -55,6 +52,14 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public int getGames() {

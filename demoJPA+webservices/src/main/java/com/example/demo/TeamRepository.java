@@ -11,7 +11,7 @@ import com.example.data.Team;
 
 public interface TeamRepository extends CrudRepository<Team, Integer> {
     @Query("select t from Team t where t.name like %?1")
-    List<Team> findByNameEndsWith(String name);
+    List<Team> findByName(String name);
 
     @Modifying
     @Query("delete Team t where t.name like :name")

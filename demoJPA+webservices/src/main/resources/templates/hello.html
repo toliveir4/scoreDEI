@@ -38,9 +38,9 @@
     <div align="center" style="margin-top: 15%">
         <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
         <br>
-        <form th:action="@{/saveData}" method="post">
+        <form th:action="@{/loadData}" method="get">
             <div id="dummy">
-            <button type="submit">Create Dummy Data</button>
+            <button type="submit">Load Data From the API</button>
             </div>
         </form>
     </div>

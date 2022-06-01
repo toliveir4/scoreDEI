@@ -1,34 +1,32 @@
 package com.example.demo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.example.data.Event;
+import com.example.data.Match;
 import com.example.data.Player;
 import com.example.data.Team;
-
-import com.example.data.Match;
 import com.example.data.WebUser;
-import com.example.data.Event;
-import java.util.Date;
-
 import com.example.formdata.FormData;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -70,27 +68,46 @@ public class DataController {
     public String loadData() throws UnirestException {
         String URL = "https://v3.football.api-sports.io/";
         // Premier League 2021
-        String ENDPOINT = "teams?league=39&season=2021";
+        String ENDPOINT = "players?league=39&season=2021";
         String API_KEY = "6dbe15bb3475e04f108b39b89b365672";
 
-        Unirest.setTimeouts(0, 0);
-        HttpResponse<JsonNode> response = Unirest.get(URL + ENDPOINT)
+        HttpResponse<JsonNode> responsePlayers = Unirest.get(URL + ENDPOINT)
                 .header("x-rapidapi-key", API_KEY)
                 .header("x-rapidapi-host", "v3.football.api-sports.io")
                 .asJson();
 
-        return "redirect:/hello";
-    }
+        JSONArray playersBody = responsePlayers.getBody().getObject().getJSONArray("response");
 
-    @PostMapping("/saveData")
-    public String saveData(Model model) {
+        ArrayList<JSONObject> arrays = new ArrayList<JSONObject>();
+        for (int i = 0; i < playersBody.length(); i++)
+            arrays.add(playersBody.getJSONObject(i));
+        
+        for (int p = 0; p < arrays.size(); p++) {
+            String name = arrays.get(p).getJSONObject("player").getString("name");
+            String birth = arrays.get(p).getJSONObject("player").getJSONObject("birth").optString("date", "2001-10-14");
 
-        Team[] myTeams = {
-                new Team("Benfica", 34, 34, 0, 0),
-                new Team("Porto", 34, 0, 0, 35),
-                new Team("Sporting", 34, 0, 34, 0)
-        };
+            JSONArray pArr = arrays.get(p).optJSONArray("statistics");
+            ArrayList<JSONObject> arr = new ArrayList<JSONObject>();
+            arr.add(pArr.getJSONObject(0));
 
+            
+            Team tt = new Team(arr.get(0).getJSONObject("team").getString("name"), 
+                    arr.get(0).getJSONObject("team").getString("logo"));
+            
+            List<Team> check = this.teamService.findByName(tt.getName());
+
+            if (check.isEmpty())
+                this.teamService.addTeam(tt);
+            else tt = check.get(0);
+
+            String position = arr.get(0).getJSONObject("games").getString("position");
+            
+            Player newP = new Player(name, position, birth);
+            this.playerService.addPlayer(newP);
+            newP.setTeam(tt);
+        }
+
+        // TODO isto vai saltar fora, apenas está a servir como ajuda
         WebUser[] users = {
 
                 new WebUser("user", "pass"),
@@ -104,35 +121,12 @@ public class DataController {
             try {
                 this.userService.addUser(u);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
 
-        Player[] myPlayers = {
-                new Player("Darwin", "CF", "24-6-1999"),
-                new Player("Taarabt", "CM", "24-3-1989"),
-                new Player("Cristiano Ronaldo", "CF", "5-2-1985"),
-                new Player("Pepe", "CB", "26-2-1983"),
-                new Player("Ruben Dias", "CB", "14-5-1997"),
-                new Player("Palhinha", "CDM", "9-7-1995")
-        };
-
-        myPlayers[0].setTeam(myTeams[1]);
-        myPlayers[1].setTeam(myTeams[2]);
-        myPlayers[2].setTeam(myTeams[0]);
-        myPlayers[3].setTeam(myTeams[2]);
-        myPlayers[4].setTeam(myTeams[1]);
-        myPlayers[5].setTeam(myTeams[0]);
-
-        for (Team t : myTeams)
-            t.setBestScorer(myPlayers[2].getName());
-
-        for (Player p : myPlayers)
-            this.playerService.addPlayer(p);
-
         Match[] match = {
-                new Match("user vs a", "2-1", "22-12-2020 15:30", 1),
+                  new Match("user vs a", "2-1", "22-12-2020 15:30", 1),
                 new Match("tmatos vs user", "2-3", "22-12-2020 12:30", 1),
         };
 

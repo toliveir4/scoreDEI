@@ -45,6 +45,10 @@ public class TeamService {
         return teamRepository.findById(id);
     }
 
+    List<Team> findByName(String name) {
+        return teamRepository.findByName(name);
+    }
+
     List<Team> orderByGamesASC() {
         return teamRepository.orderByGamesASC();
     }
