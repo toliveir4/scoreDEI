@@ -34,5 +34,18 @@ public class PlayerService
     public List<Player> findByNameEndsWith(String chars) {
         return playerRepository.findByNameEndsWith(chars);
     }
+    public List<Player> getAllPlayersOrderByGoalsASC(){
+        return playerRepository.orderByGoalsASC();
+    }
+    public List<Player> getAllPlayersOrderByGoalsDESC(){
+        return playerRepository.orderByGoalsDESC();
+    }
+    public List<Player> getAllPlayersOrderByNameASC(){
+        return playerRepository.orderByNameASC();
+    }
+    public List<Player> getAllPlayersOrderByNameDESC(){
+        return playerRepository.orderByNameDESC();
+    }
+
 
 }    

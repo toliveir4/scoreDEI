@@ -34,6 +34,10 @@ public class DataController {
 
     @Autowired
     TeamService teamService;
+
+    @Autowired
+    TeamRepository teamRepository;
+
     @Autowired
     MatchService matchService;
 
@@ -145,6 +149,24 @@ public class DataController {
     @GetMapping("/listPlayers")
     public String listPlayers(Model model) {
         model.addAttribute("players", this.playerService.getAllPlayers());
+        model.addAttribute("field", "name");
+        model.addAttribute("order", "asc");
+        return "listPlayers";
+    }
+    @GetMapping("orderPlayers")
+    public String orderPlayers(Model m, 
+            @RequestParam(name = "field",required=true) String field, @RequestParam(name = "order",required=true) String order) {
+        m.addAttribute("field", field);
+        m.addAttribute("order", order.equals("asc") ? "desc" : "asc");
+    
+        if (order.equals("asc") && field.equals("name"))
+            m.addAttribute("players", this.playerService.getAllPlayersOrderByNameASC());
+        else if (order.equals("desc") && field.equals("name"))
+            m.addAttribute("players",this.playerService.getAllPlayersOrderByNameDESC());
+        else if (order.equals("asc") && field.equals("goals"))
+            m.addAttribute("players", this.playerService.getAllPlayersOrderByGoalsASC());
+        else if (order.equals("desc") && field.equals("goals"))
+            m.addAttribute("players", this.playerService.getAllPlayersOrderByGoalsDESC());
         return "listPlayers";
     }
 
@@ -189,35 +211,35 @@ public class DataController {
 
     @GetMapping("/listTeams")
     public String listTeams(Model model) {
-        model.addAttribute("reverseSort", "asc");
+        model.addAttribute("field", "wins");
+        model.addAttribute("order", "asc");
         model.addAttribute("teams", this.teamService.getAllTeams());
         return "listTeams";
     }
 
-    @GetMapping("/listTeams?field={field}order={order}")
+    @GetMapping("orderTeams")
     public String orderTeams(Model m, 
-            @RequestParam(name = "field") String field, @RequestParam(name = "order") String order) {
-            
+            @RequestParam(name = "field",required=true) String field, @RequestParam(name = "order",required=true) String order) {
+        order=order.equals("asc") ? "desc" : "asc";
         m.addAttribute("field", field);
         m.addAttribute("order", order);
-        m.addAttribute("reverseSort", order.equals("asc") ? "desc" : "asc");
     
         if (order.equals("asc") && field.equals("games"))
-            m.addAttribute("teams", this.teamService.getAllTeams());
+            m.addAttribute("teams", this.teamRepository.orderByGamesASC());
         else if (order.equals("desc") && field.equals("games"))
-            m.addAttribute("teams", this.teamService.getAllTeams());
+            m.addAttribute("teams",this.teamRepository.orderByGamesDESC());
         else if (order.equals("asc") && field.equals("wins"))
-            m.addAttribute("teams", this.teamService.getAllTeams());
+            m.addAttribute("teams", this.teamRepository.orderByWinsASC());
         else if (order.equals("desc") && field.equals("wins"))
-            m.addAttribute("teams", this.teamService.getAllTeams());
+            m.addAttribute("teams", this.teamRepository.orderByWinsDESC());
         else if (order.equals("asc") && field.equals("draws"))
-            m.addAttribute("teams", this.teamService.getAllTeams());
+            m.addAttribute("teams", this.teamRepository.orderByDrawsASC());
         else if (order.equals("desc") && field.equals("draws"))
-            m.addAttribute("teams", this.teamService.getAllTeams());
+            m.addAttribute("teams", this.teamRepository.orderByDrawsDESC());
         else if (order.equals("asc") && field.equals("defeats"))
-            m.addAttribute("teams", this.teamService.getAllTeams());
+            m.addAttribute("teams", this.teamRepository.orderByDefeatsASC());
         else if (order.equals("desc") && field.equals("defeats"))
-            m.addAttribute("teams", this.teamService.getAllTeams());
+            m.addAttribute("teams", this.teamRepository.orderByDefeatsDESC());
 
         return "listTeams";
     }
@@ -322,6 +344,9 @@ public class DataController {
         try {
             event.setTime(new Date());
             this.eventService.addEvent(event);
+            if(event.getType()==2){
+                //atualizar o numero de golos
+            }
 
         } catch (Exception e) {
             return "redirect:/listMatches";

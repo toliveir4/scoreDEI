@@ -47,10 +47,10 @@
     <thead>
       <tr>
         <th>NAME</th>
-        <th><a th:href="@{'/listTeams?field=games&order=' + ${reverseSort}}">GAMES</a></th>
-        <th><a th:href="@{'/listTeams?field=wins&order=' + ${reverseSort}}">WINS</a></th>
-        <th><a th:href="@{'/listTeams?field=draws&order=' + ${reverseSort}}">DRAWS</a></th>
-        <th><a th:href="@{'/listTeams?field=defeats&order=' + ${reverseSort}}">DEFEATS</a></th>
+        <th><a th:href="@{orderTeams(order=${order},field=games)}">GAMES</a></th>
+        <th><a th:href="@{orderTeams(order=${order},field=wins)}">WINS</a></th>
+        <th><a th:href="@{orderTeams(order=${order},field=draws)}">DRAWS</a></th>
+        <th><a th:href="@{orderTeams(order=${order},field=defeats)}">DEFEATS</a></th>
         <th>BEST SCORER</th>
         <th>EDIT</th>
       </tr>
