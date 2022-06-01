@@ -32,5 +32,4 @@ public interface MatchRepository extends CrudRepository <Match, Integer> {
     @Query("update Match m set m.status = 1 where id = :id")
     void updateStatus(int id);
 
-
 }    

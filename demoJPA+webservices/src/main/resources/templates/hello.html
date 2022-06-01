@@ -30,24 +30,24 @@
                 <li><a th:href="@{/listTeams}">List of Teams</a></li>
                 <li><a th:href="@{/listMatches}">List of Matches</a></li>
                 <li>
-                   
+
                     <form th:action="@{/logout}" method="post" style="margin: 10px ;">
                         <input class="btn btn-primary" type="submit" value="Sign Out" />
                     </form>
-                
+
                 </li>
             </ul>
         </div>
     </nav>
-    
+
     <div align="center" style="margin-top: 15%">
         <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
         <br>
-                   
+
         <form th:action="@{/admin}" method="get" style="margin: 10px ;">
             <input class="btn btn-primary" type="submit" value="ADMIN mode" />
         </form>
-            
+
     </div>
 </body>
 

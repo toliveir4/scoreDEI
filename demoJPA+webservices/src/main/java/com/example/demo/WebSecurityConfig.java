@@ -55,16 +55,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				.authorizeRequests()
 				.antMatchers("/admin/**").hasRole("ADMIN")
-				.antMatchers("/", "/home", "/signup", "/saveUser", "/style.css", "/match", "/listTeams").permitAll()
+				.antMatchers("/", "/home", "/signup", "/saveUser", "/style.css", "/match**", "/listTeams", "/listMatches", "/listPlayers").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
 				.loginPage("/login")
-				
 				.defaultSuccessUrl("/hello")
 				.permitAll()
 				.and()
 				.logout()
+				.deleteCookies("JSESSIONID")
+				.invalidateHttpSession(true)
 				.permitAll();
 				
 	}

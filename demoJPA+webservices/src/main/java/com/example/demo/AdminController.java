@@ -63,10 +63,12 @@ public class AdminController {
     WebSecurityConfig securityService;
 
 
-    //private final static Logger logger = LoggerFactory.getLogger(AdminController.class);
+    private final static Logger logger = LoggerFactory.getLogger(AdminController.class);
 
-    @GetMapping("/loadData")
+    @GetMapping("/admin/loadData")
     public String loadData() throws UnirestException {
+        logger.info("LOAD DATA FROM THE API!");
+
         String URL = "https://v3.football.api-sports.io/";
         // Premier League 2021
         String ENDPOINT = "players?league=39&season=2021";
@@ -127,8 +129,8 @@ public class AdminController {
         }
 
         Match[] match = {
-                  new Match("user vs a", "2-1", "22-12-2020 15:30", 1),
-                new Match("tmatos vs user", "2-3", "22-12-2020 12:30", 1),
+                new Match("Liverpool vs Arsenal", "2-1", "22-12-2020 15:30", 1),
+                new Match("Everton vs Leicester", "2-3", "22-12-2020 12:30", 1),
         };
 
         for (Match m : match)

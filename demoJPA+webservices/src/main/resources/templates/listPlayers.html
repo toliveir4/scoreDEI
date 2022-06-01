@@ -34,7 +34,9 @@
         <li><a class="active">List of Players</a></li>
         <li><a th:href="@{/listTeams}">List of Teams</a></li>
         <li><a th:href="@{/listMatches}">List of Matches</a></li>
-        <li><a th:href="@{/login?logout}">Sign Out</a></li>
+        <form th:action="@{/logout}" method="post" style="margin: 10px ;">
+          <input class="btn btn-primary" type="submit" value="Sign Out" />
+        </form>
       </ul>
     </div>
   </nav>

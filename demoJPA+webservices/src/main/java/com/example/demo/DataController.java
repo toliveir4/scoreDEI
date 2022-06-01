@@ -1,13 +1,10 @@
 package com.example.demo;
 
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.example.data.Event;
@@ -15,28 +12,22 @@ import com.example.data.Match;
 import com.example.data.Player;
 import com.example.data.Team;
 import com.example.data.WebUser;
-import com.example.formdata.FormData;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class DataController {
@@ -76,86 +67,6 @@ public class DataController {
     public String admin() {
         securityService.userDetailsService(userService.getAllUsers());
         return "redirect:/admin/hello";
-    }
-
-    @GetMapping("/loadData")
-    public String loadData() throws UnirestException {
-        String URL = "https://v3.football.api-sports.io/";
-        // Premier League 2021
-        String ENDPOINT = "players?league=39&season=2021";
-        String API_KEY = "6dbe15bb3475e04f108b39b89b365672";
-
-        HttpResponse<JsonNode> responsePlayers = Unirest.get(URL + ENDPOINT)
-                .header("x-rapidapi-key", API_KEY)
-                .header("x-rapidapi-host", "v3.football.api-sports.io")
-                .asJson();
-
-        JSONArray playersBody = responsePlayers.getBody().getObject().getJSONArray("response");
-
-        ArrayList<JSONObject> arrays = new ArrayList<JSONObject>();
-        for (int i = 0; i < playersBody.length(); i++)
-            arrays.add(playersBody.getJSONObject(i));
-        
-        for (int p = 0; p < arrays.size(); p++) {
-            String name = arrays.get(p).getJSONObject("player").getString("name");
-            String birth = arrays.get(p).getJSONObject("player").getJSONObject("birth").optString("date", "2001-10-14");
-
-            JSONArray pArr = arrays.get(p).optJSONArray("statistics");
-            ArrayList<JSONObject> arr = new ArrayList<JSONObject>();
-            arr.add(pArr.getJSONObject(0));
-
-            
-            Team tt = new Team(arr.get(0).getJSONObject("team").getString("name"), 
-                    arr.get(0).getJSONObject("team").getString("logo"));
-            
-            List<Team> check = this.teamService.findByName(tt.getName());
-
-            if (check.isEmpty())
-                this.teamService.addTeam(tt);
-            else tt = check.get(0);
-
-            String position = arr.get(0).getJSONObject("games").getString("position");
-            
-            Player newP = new Player(name, position, birth);
-            this.playerService.addPlayer(newP);
-            newP.setTeam(tt);
-        }
-
-        // TODO isto vai saltar fora, apenas está a servir como ajuda
-        WebUser[] users = {
-
-                new WebUser("user", "pass"),
-                new WebUser("tmatos", "adeus"),
-                new WebUser("user1", "pass1"),
-                new WebUser("user2", "pass2"),
-                new WebUser("user3", "pass3"),
-        };
-
-        for (WebUser u : users) {
-            try {
-                this.userService.addUser(u);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        Match[] match = {
-                  new Match("user vs a", "2-1", "22-12-2020 15:30", 1),
-                new Match("tmatos vs user", "2-3", "22-12-2020 12:30", 1),
-        };
-
-        for (Match m : match)
-            this.matchService.addMatch(m);
-
-        Event[] event = {
-                new Event("title1", "info1", "86:02", 1),
-                new Event("title2", "info2", "90:01", 1),
-        };
-
-        for (Event e : event)
-            this.eventService.addEvent(e);
-
-        return "redirect:/listPlayers";
     }
 
     @GetMapping("/listPlayers")
