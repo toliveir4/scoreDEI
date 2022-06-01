@@ -2,7 +2,6 @@ package com.example.data;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,11 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -33,14 +30,24 @@ public class Match {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Event> events;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Team> teams;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Team Home;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Team Away;
+    
     public Match() {
+        SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Date d;
+        try {
+            d = dt.parse("01-06-2022 20:00:00");
+            this.date = d;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
-    public Match(String name, String score, String date, int status) {
-        this.name = name;
+    public Match(String score, String date, int status) {
         this.score = score;
         this.status = status;
 
@@ -52,12 +59,10 @@ public class Match {
         }
 
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm");
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             this.date = formatter.parse(date);
         } catch (Exception e) {
         }
-
-        this.teams = new ArrayList<>();
     }
 
     public int getId() {
@@ -118,12 +123,12 @@ public class Match {
 
     // TODO verificar se a data e valida (?)
     public String getDate() {
-        SimpleDateFormat d = new SimpleDateFormat("dd-mm-yyyy HH:mm");
+        SimpleDateFormat d = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         return d.format(date);
     }
 
     public void setDate(String date) {
-        SimpleDateFormat dt = new SimpleDateFormat("dd-mm-yyyy HH:mm");
+        SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date d;
         try {
             d = dt.parse(date);
@@ -133,18 +138,20 @@ public class Match {
         }
     }
 
-    @XmlElementWrapper(name = "teams")
-    @XmlElement(name = "team")
-    public List<Team> getTeams() {
-        return teams;
+    public Team getHome() {
+        return Home;
     }
 
-    public void addTeam(Team team) {
-        this.teams.add(team);
+    public void setHome(Team home) {
+        this.Home = home;
+    }
+    
+    public Team getAway() {
+        return Away;
     }
 
-    public void setTeams(List<Team> teams) {
-        this.teams = teams;
+    public void setAway(Team away) {
+        this.Away = away;
     }
 
     public String toString() {

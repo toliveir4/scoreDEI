@@ -45,7 +45,7 @@ public class TeamService {
         return teamRepository.findById(id);
     }
 
-    List<Team> findByName(String name) {
+    Team findByName(String name) {
         return teamRepository.findByName(name);
     }
 

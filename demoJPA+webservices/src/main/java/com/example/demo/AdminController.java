@@ -88,7 +88,6 @@ public class AdminController {
         for (int p = 0; p < arrays.size(); p++) {
             String name = arrays.get(p).getJSONObject("player").getString("name");
             String birth = arrays.get(p).getJSONObject("player").getJSONObject("birth").optString("date", "2001-10-14");
-
             JSONArray pArr = arrays.get(p).optJSONArray("statistics");
             ArrayList<JSONObject> arr = new ArrayList<JSONObject>();
             arr.add(pArr.getJSONObject(0));
@@ -97,11 +96,11 @@ public class AdminController {
             Team tt = new Team(arr.get(0).getJSONObject("team").getString("name"), 
                     arr.get(0).getJSONObject("team").getString("logo"));
             
-            List<Team> check = this.teamService.findByName(tt.getName());
+            Team check = this.teamService.findByName(tt.getName());
 
-            if (check.isEmpty())
+            if (check == null)
                 this.teamService.addTeam(tt);
-            else tt = check.get(0);
+            else tt = check;
 
             String position = arr.get(0).getJSONObject("games").getString("position");
             
@@ -109,6 +108,11 @@ public class AdminController {
             this.playerService.addPlayer(newP);
             newP.setTeam(tt);
         }
+
+        Team a = new Team("Liverpool", "a.png");
+        Team b = new Team("Arsenal", "b.png");
+        this.teamService.addTeam(a);
+        this.teamService.addTeam(b);
 
         // TODO isto vai saltar fora, apenas está a servir como ajuda
         WebUser[] users = {
@@ -129,12 +133,14 @@ public class AdminController {
         }
 
         Match[] match = {
-                new Match("Liverpool vs Arsenal", "2-1", "22-12-2020 15:30", 1),
-                new Match("Everton vs Leicester", "2-3", "22-12-2020 12:30", 1),
+                new Match("2-1", "22-12-2020 15:30:00", 1),
+                new Match("2-3", "22-12-2020 12:30:00", 1),
         };
+        match[0].setName("Liverpool vs Arsenal");
+        match[1].setName("Everton vs Leicester");
 
         for (Match m : match)
-            this.matchService.addMatch(m);
+            this.matchService.addMatch(m); 
 
         Event[] event = {
                 new Event("title1", "info1", "86:02", 1),
@@ -255,6 +261,26 @@ public class AdminController {
     public String listMatches(Model model) {
         model.addAttribute("matches", this.matchService.getAllMatchs());
         return "admin/listMatches";
+    }
+
+    @GetMapping("/admin/createMatch")
+    private String createMatch(Model m) {
+        m.addAttribute("match", new Match());
+        m.addAttribute("allTeams", this.teamService.getAllTeams());
+        return "createMatch";
+    }
+
+    @PostMapping("/admin/saveMatch")
+    private String saveMatch(@ModelAttribute @Valid Match match, Model m) {
+        logger.info("SAVE MATCH!");
+        Team home = match.getHome();
+        Team away = match.getAway();
+        if (home != null && away != null && !home.equals(away)) {
+            match.setName(home.getName() + " vs " + away.getName());
+            this.matchService.addMatch(match);
+            return "redirect:/admin/listMatches";
+        }
+        return "redirect:/admin/createMatch";
     }
 
     @GetMapping("/match")

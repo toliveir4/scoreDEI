@@ -45,6 +45,7 @@
             <th>ID</th>
             <th>NAME</th>
             <th>SCORE</th>
+            <th>STATUS</th>
             <th>DATE</th>
             <th>EDIT</th>
           </tr>
@@ -53,6 +54,7 @@
             <td th:text="${m.id}">id</td>
             <td th:text="${m.name}">name</td>
             <td th:text="${m.score}">score</td>
+            <td th:text="${m.status}">status</td>
             <td th:text="${m.date}">date</td>
             <td ><a th:href="@{match(id=${m.id})}">edit</a></td>
             </tr>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+    <title>Create Match - ADMIN</title>
+</head>
+
+<body>
+    <div>
+        <form th:action="@{/admin/saveMatch}" th:object="${match}" method="post">
+            <div="form-row">
+                <div>
+                    <input type="hidden" th:field="*{id}">
+                </div>
+                <div>
+                    <a>Home Team</a>
+                    <select id="home" th:field="*{Home}">
+                        <option value="" th:text="------"></option>
+                        <option th:each="team : ${allTeams}" th:value="${{team.id}}" th:text="${team.name}">
+                            The name
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <a>Away Team</a>
+                    <select id="away" th:field="*{Away}">
+                        <option value="" th:text="------"></option>
+                        <option th:each="team : ${allTeams}" th:value="${{team.id}}" th:text="${team.name}">
+                            The name
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label>Score</label>
+                    <input type="text" th:field="*{score}">
+                </div>
+                <div>
+                    <label>Status</label>
+                    <input type="number" th:field="*{status}" min="0" max="2">
+                </div>
+                <div>
+                    <label>Date</label>
+                    <input type="datetime" th:field="*{date}">
+                </div>
+                <div>
+                    <br>
+                    <button type="submit">Create Match</button>
+                </div>
+    </div>
+    </form>
+</body>
+
+</html>

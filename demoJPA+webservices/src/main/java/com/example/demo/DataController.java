@@ -27,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -57,12 +58,12 @@ public class DataController {
     @Autowired
     WebSecurityConfig securityService;
 
-
     @GetMapping("/")
     public String redirect() {
         securityService.userDetailsService(userService.getAllUsers());
         return "redirect:/home";
     }
+
     @GetMapping("/admin")
     public String admin() {
         securityService.userDetailsService(userService.getAllUsers());
@@ -147,7 +148,7 @@ public class DataController {
     private String saveUser(@ModelAttribute @Valid WebUser u, Model m) {
         try {
             userService.addUser(u);
-            securityService.userDetailsService(u.getUsername(), u.getPassword(),u.getAdmin());
+            securityService.userDetailsService(u.getUsername(), u.getPassword(), u.getAdmin());
 
         } catch (Exception e) {
             m.addAttribute("error", "Username taken!");
@@ -157,27 +158,45 @@ public class DataController {
         return "redirect:/login";
     }
 
+    @GetMapping("/createMatch")
+    private String createMatch(Model m) {
+        m.addAttribute("match", new Match());
+        m.addAttribute("allTeams", this.teamService.getAllTeams());
+        return "createMatch";
+    }
+
+    @PostMapping("/saveMatch")
+    private String saveMatch(@ModelAttribute @Valid Match match, Model m) {
+        logger.info("SAVE MATCH!");
+        Team home = match.getHome();
+        Team away = match.getAway();
+        if (home != null && away != null && !home.equals(away)) {
+            match.setName(home.getName() + " vs " + away.getName());
+            this.matchService.addMatch(match);
+            return "redirect:/listMatches";
+        }
+        return "redirect:/createMatch";
+    }
 
     @GetMapping("/listMatches")
-    public String listMatches(Model model) {
+    private String listMatches(Model model) {
         model.addAttribute("matches", this.matchService.getAllMatchs());
         return "listMatches";
     }
 
     @GetMapping("/match")
-    public String match(@RequestParam(name = "id", required = true) int id, Model m) {
+    private String match(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Match> op = this.matchService.getMatch(id);
         if (op.isPresent()) {
             m.addAttribute("events", eventRepository.getEventsFromMatch(op.get()));
             m.addAttribute("match", op.get());
             return "match";
-        } else {
-            return "redirect:/listMatches";
         }
+        return "redirect:/listMatches";
     }
 
     @GetMapping("/createEvent")
-    public String createEvent(@RequestParam(name = "id", required = true) int id, Model m) {
+    private String createEvent(@RequestParam(name = "id", required = true) int id, Model m) {
         Optional<Match> op = this.matchService.getMatch(id);
         if (op.isPresent()) {
 
@@ -196,7 +215,7 @@ public class DataController {
     }
 
     @GetMapping("/saveEvent")
-    public String saveEvent(@ModelAttribute Event event, Model m) {
+    private String saveEvent(@ModelAttribute Event event, Model m) {
         try {
             event.setTime(new Date());
             this.eventService.addEvent(event);
@@ -209,5 +228,5 @@ public class DataController {
         }
         return "redirect:/match?id=" + event.getMatch().getId();
     }
-    
+
 }
