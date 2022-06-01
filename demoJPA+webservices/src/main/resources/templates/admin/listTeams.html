@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 
-  <title>List of Users</title>
+  <title>List of Teams</title>
   <meta charset="utf8" />
 </head>
 
@@ -22,7 +22,7 @@
     <div class="container-fluid" style="padding-right:0; margin-bottom:2px">
       <a class="navbar-brand" href="@{/home}"
         style=" display: inline-flex;font-size:34px; margin-top: -10px;font-family: 'Varela Round';">
-    
+
         <i class="fa fa-soccer-ball-o" style="font-size: 48px;color:white; rotate: 60deg; margin-top:9px"></i>
         <h2
           style="display: inline-flex; font-family:'Varela Round',sans-serif;font-size: 36px;margin-top: 20px;margin-bottom:-10px;margin-left: 5px;">
@@ -30,32 +30,40 @@
         </h2>
       </a>
       <ul class="menu">
-        <li><a th:href="@{/hello}">Home</a></li>
-        <li><a th:href="@{/listPlayers}">List of Players</a></li>
-        <li><a th:href="@{/listTeams}">List of Teams</a></li>
-        <li><a th:href="@{/listMatches}">List of Matches</a></li>
-        <li><a class="active">List of Users</a></li>
-        <li><a th:href="@{/login?logout}">Sign Out</a></li>
+        <li><a th:href="@{/admin/hello}">Home</a></li>
+        <li><a th:href="@{/admin/listPlayers}">List of Players</a></li>
+        <li><a class="active">List of Teams</a></li>
+        <li><a th:href="@/admin{/listMatches}">List of Matches</a></li>
+        <li><a th:href="@{/admin/listUsers}">List of Users</a></li>
+        <li><a th:href="@{/admin/login?logout}">Sign Out</a></li>
       </ul>
     </div>
   </nav>
   <br>
 
-  <h1 align="center">List of Users</h1>
+  <h1 align="center">List of Teams</h1>
 
   <table class="table">
-    <tr>
-      <th>USERNAME</th>
-      <th>PASSWORD</th>
-      <th>EMAIL</th>
-      <th>ADMIN</th>
-    </tr>
-    <tr th:each="u : ${web_user}">
-      <td th:text="${u.username}">username</td>
-      <td th:text="${u.password}">password</td>
-      <td th:text="${u.email}">email</td>
-      <td th:text="${u.admin}">admin</td>
-    </tr>
+    <thead>
+      <tr>
+        <th>NAME</th>
+        <th><a th:href="@{'/listTeams?field=games&order=' + ${order}}">GAMES</a></th>
+        <th><a th:href="@{'/listTeams?field=wins&order=' + ${order}}">WINS</a></th>
+        <th><a th:href="@{'/listTeams?field=draws&order=' + ${order}}">DRAWS</a></th>
+        <th><a th:href="@{'/listTeams?field=defeats&order=' + ${order}}">DEFEATS</a></th>
+        <th>BEST SCORER</th>
+        <th>EDIT</th>
+      </tr>
+      <tr th:each="t : ${teams}">
+        <td th:text="${t.name}">name</td>
+        <td th:text="${t.games}">games</td>
+        <td th:text="${t.wins}">wins</td>
+        <td th:text="${t.draws}">draws</td>
+        <td th:text="${t.defeats}">defeats</td>
+        <td th:text="${t.bestScorer}">best_scorer</td>
+        <td><a th:href="@{editTeam(id=${t.id})}">here</a></td>
+      </tr>
+    </thead>
   </table>
 
 </body>

@@ -17,6 +17,7 @@ import com.example.data.WebUser;
 
 @Configuration
 @EnableWebSecurity
+
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	ArrayList<UserDetails> userDetailsList = new ArrayList<>();
 	InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
@@ -53,27 +54,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.antMatchers("/", "/home", "/signup", "/saveUser", "/style.css").permitAll()
+				.antMatchers("/admin/**").hasRole("ADMIN")
+				.antMatchers("/", "/home", "/signup", "/saveUser", "/style.css","/admin","/admin/home","/admin/login").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
 				.loginPage("/login")
+				
 				.defaultSuccessUrl("/hello")
 				.permitAll()
 				.and()
 				.logout().logoutUrl("/login?logout")
 				.permitAll();
+				
 	}
 	// }
 
 	@Bean
 	@Override
 	public UserDetailsService userDetailsService() {
-		userDetailsList.add(User.withDefaultPasswordEncoder()
-				.username("admin1")
-				.password("adminPass")
-				.roles("ADMIN", "USER")
-				.build());
+		manager.createUser(User.withDefaultPasswordEncoder()
+		.username("admin1")
+		.password("adminPass")
+		.roles("ADMIN", "USER")
+		.build());
 
 		return manager;
 	}
@@ -90,13 +94,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				;
 			}
 		}
-
-		userDetailsList.add(User.withDefaultPasswordEncoder()
-				.username("admin1")
-				.password("adminPass")
-				.roles("ADMIN", "USER")
-				.build());
-
 		return manager;
 	}
 
@@ -106,12 +103,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.username(name)
 				.password(password)
 				.roles("USER")
-				.build());
-
-		userDetailsList.add(User.withDefaultPasswordEncoder()
-				.username("admin1")
-				.password("adminPass")
-				.roles("ADMIN", "USER")
 				.build());
 
 		return manager;

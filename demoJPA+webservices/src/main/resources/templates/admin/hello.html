@@ -1,25 +1,21 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
     xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head>
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-        crossorigin="anonymous"></script>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/style.css">
+    <link rel="stylesheet" href="/style.css">
 
-    <title>Home</title>
+    <title>Hello World!</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="padding-top:0; padding-bottom:0">
-        <div class="container-fluid" style="padding-right:0; margin-bottom: 2px;">
-            <a class="navbar-brand" th:href="@{/home}"
+        <div class="container-fluid" style="padding-right:0; margin-bottom:2px">
+            <a class="navbar-brand" href="@{/home}"
                 style=" display: inline-flex;font-size:34px; margin-top: -10px;font-family: 'Varela Round';">
 
                 <i class="fa fa-soccer-ball-o" style="font-size: 48px;color:white; rotate: 60deg; margin-top:9px"></i>
@@ -28,11 +24,25 @@
                     <b>scoreDEI</b>
                 </h2>
             </a>
+            <ul class="menu">
+                <li><a class="active">Home</a></li>
+                <li><a th:href="@{/admin/listPlayers}">List of Players</a></li>
+                <li><a th:href="@{/admin/listTeams}">List of Teams</a></li>
+                <li><a th:href="@{/admin/listMatches}">List of Matches</a></li>
+                <li><a th:href="@{/admin/listUsers}">List of Users</a></li>   
+                <li><a th:href="@{/login?logout}">Sign Out</a></li>
+            </ul>
         </div>
     </nav>
-    <div class="w3-center" style="margin-top: 10%;">
-        <h1 style="font-size: 90px;">Welcome!</h1>
-        <p style="color: black; font-size: 24px;">Click <a th:href="@{/login}">here</a> to Login.</p>
+    
+    <div align="center" style="margin-top: 15%">
+        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+        <br>
+        <form th:action="@{/saveData}" method="post">
+            <div id="dummy">
+            <button type="submit">Create Dummy Data</button>
+            </div>
+        </form>
     </div>
 </body>
 

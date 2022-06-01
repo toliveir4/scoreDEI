@@ -13,16 +13,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 
-  <title>List of players</title>
+  <title>List of Users</title>
   <meta charset="utf8" />
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark" style="padding-top:0; padding-bottom:0">
     <div class="container-fluid" style="padding-right:0; margin-bottom:2px">
-      <a class="navbar-brand" th:href="@{/hello}"
+      <a class="navbar-brand" href="@{/home}"
         style=" display: inline-flex;font-size:34px; margin-top: -10px;font-family: 'Varela Round';">
-
+    
         <i class="fa fa-soccer-ball-o" style="font-size: 48px;color:white; rotate: 60deg; margin-top:9px"></i>
         <h2
           style="display: inline-flex; font-family:'Varela Round',sans-serif;font-size: 36px;margin-top: 20px;margin-bottom:-10px;margin-left: 5px;">
@@ -30,37 +30,32 @@
         </h2>
       </a>
       <ul class="menu">
-        <li><a th:href="@{/hello}">Home</a></li>
-        <li><a class="active">List of Players</a></li>
-        <li><a th:href="@{/listTeams}">List of Teams</a></li>
-        <li><a th:href="@{/listMatches}">List of Matches</a></li>
+        <li><a th:href="@{/admin/hello}">Home</a></li>
+        <li><a th:href="@{/admin/listPlayers}">List of Players</a></li>
+        <li><a th:href="@{/admin/listTeams}">List of Teams</a></li>
+        <li><a th:href="@{/admin/listMatches}">List of Matches</a></li>
+        <li><a class="active">List of Users</a></li>
         <li><a th:href="@{/login?logout}">Sign Out</a></li>
       </ul>
     </div>
   </nav>
   <br>
 
-  <h1 align="center">List of Players</h1>
+  <h1 align="center">List of Users</h1>
 
   <table class="table">
-    <thead>
-      <tr>
-        <th><a th:href="@{orderPlayers(order=${order},field=name)}">NAME</a></th>
-        <th>POSITION</th>
-        <th><a th:href="@{orderPlayers(order=${order},field=goals)}">GOALS</a></th>
-        <th>BIRTHDAY</th>
-        <th>CHANGE</th>
-        <th>TEAM</th>
-      </tr>
-      <tr th:each="s : ${players}">
-        <td th:text="${s.name}">name</td>
-        <td th:text="${s.position}">position</td>
-        <td th:text="${s.goals}">goals</td>
-        <td th:text="${s.birthday}">birthday</td>
-        <td><a th:href="@{editPlayer(id=${s.id})}">here</a></td>
-        <td th:text="${s.team}">team</td>
-      </tr>
-    </thead>
+    <tr>
+      <th>USERNAME</th>
+      <th>PASSWORD</th>
+      <th>EMAIL</th>
+      <th>ADMIN</th>
+    </tr>
+    <tr th:each="u : ${web_user}">
+      <td th:text="${u.username}">username</td>
+      <td th:text="${u.password}">password</td>
+      <td th:text="${u.email}">email</td>
+      <td th:text="${u.admin}">admin</td>
+    </tr>
   </table>
 
 </body>

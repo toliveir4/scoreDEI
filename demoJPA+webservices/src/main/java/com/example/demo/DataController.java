@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+
 public class DataController {
     private final static Logger logger = LoggerFactory.getLogger(DataController.class);
 
@@ -63,6 +64,13 @@ public class DataController {
         securityService.userDetailsService(userService.getAllUsers());
         return "redirect:/home";
     }
+
+    @GetMapping("/admin")
+    public String admin() {
+        securityService.userDetailsService(userService.getAllUsers());
+        return "redirect:/admin/home";
+    }
+
 
     @GetMapping("/loadData")
     public String loadData() throws UnirestException {
@@ -345,9 +353,29 @@ public class DataController {
         try {
             event.setTime(new Date());
             this.eventService.addEvent(event);
-            if (event.getType() == 2) {
-                // atualizar o numero de golos
+            switch(event.getType()){
+                case 1:{
+
+                    //inicio do jogo
+                    break;
+                }
+                case 2:{
+                     // 
+                    break;}
+                case 3:{
+                     // 
+                    break;}
+                case 4:{
+                     // 
+                    break;}
+                case 5:{
+                     // 
+                    break;}
+                case 6:{
+                     // 
+                    break;}
             }
+            
 
         } catch (Exception e) {
             return "redirect:/listMatches";

@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- JavaScript Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
@@ -13,14 +14,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
 
-  <title>List of players</title>
+  <title>List of Teams</title>
   <meta charset="utf8" />
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark" style="padding-top:0; padding-bottom:0">
     <div class="container-fluid" style="padding-right:0; margin-bottom:2px">
-      <a class="navbar-brand" th:href="@{/hello}"
+      <a class="navbar-brand" href="@{/hello}"
         style=" display: inline-flex;font-size:34px; margin-top: -10px;font-family: 'Varela Round';">
 
         <i class="fa fa-soccer-ball-o" style="font-size: 48px;color:white; rotate: 60deg; margin-top:9px"></i>
@@ -31,34 +32,37 @@
       </a>
       <ul class="menu">
         <li><a th:href="@{/hello}">Home</a></li>
-        <li><a class="active">List of Players</a></li>
-        <li><a th:href="@{/listTeams}">List of Teams</a></li>
+        <li><a th:href="@{/listPlayers}">List of Players</a></li>
+        <li><a class="active">List of Teams</a></li>
         <li><a th:href="@{/listMatches}">List of Matches</a></li>
+        <li><a th:href="@{/listUsers}">List of Users</a></li>
         <li><a th:href="@{/login?logout}">Sign Out</a></li>
       </ul>
     </div>
   </nav>
   <br>
 
-  <h1 align="center">List of Players</h1>
+  <h1 align="center">List of Teams</h1>
 
   <table class="table">
     <thead>
       <tr>
-        <th><a th:href="@{orderPlayers(order=${order},field=name)}">NAME</a></th>
-        <th>POSITION</th>
-        <th><a th:href="@{orderPlayers(order=${order},field=goals)}">GOALS</a></th>
-        <th>BIRTHDAY</th>
-        <th>CHANGE</th>
-        <th>TEAM</th>
+        <th>NAME</th>
+        <th><a th:href="@{listTeams(order=${order},field=games)}">GAMES</a></th>
+        <th><a th:href="@{listTeams(order=${order},field=wins)}">WINS</a></th>
+        <th><a th:href="@{listTeams(order=${order},field=draws)}">DRAWS</a></th>
+        <th><a th:href="@{listTeams(order=${order},field=defeats)}">DEFEATS</a></th>
+        <th>BEST SCORER</th>
+        <th>EDIT</th>
       </tr>
-      <tr th:each="s : ${players}">
-        <td th:text="${s.name}">name</td>
-        <td th:text="${s.position}">position</td>
-        <td th:text="${s.goals}">goals</td>
-        <td th:text="${s.birthday}">birthday</td>
-        <td><a th:href="@{editPlayer(id=${s.id})}">here</a></td>
-        <td th:text="${s.team}">team</td>
+      <tr th:each="t : ${teams}">
+        <td th:text="${t.name}">name</td>
+        <td th:text="${t.games}">games</td>
+        <td th:text="${t.wins}">wins</td>
+        <td th:text="${t.draws}">draws</td>
+        <td th:text="${t.defeats}">defeats</td>
+        <td th:text="${t.bestScorer}">best_scorer</td>
+        <td><a th:href="@{editTeam(id=${t.id})}">here</a></td>
       </tr>
     </thead>
   </table>

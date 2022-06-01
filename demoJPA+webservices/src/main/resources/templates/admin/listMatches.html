@@ -15,7 +15,7 @@
     <body>
       <nav class="navbar navbar-expand-lg navbar-dark" style="padding-top:0; padding-bottom:0">
         <div class="container-fluid" style="padding-right:0; margin-bottom:2px">
-          <a class="navbar-brand" th:href="@{/hello}"
+          <a class="navbar-brand" href="@{/home}"
             style=" display: inline-flex;font-size:34px; margin-top: -10px;font-family: 'Varela Round';">
       
             <i class="fa fa-soccer-ball-o" style="font-size: 48px;color:white; rotate: 60deg; margin-top:9px"></i>
@@ -29,6 +29,7 @@
             <li><a th:href="@{/listPlayers}">List of Players</a></li>
             <li><a th:href="@{/listTeams}">List of Teams</a></li>
             <li><a class="active">List of Matches</a></li>
+            <li><a th:href="@{/listUsers}">List of Users</a></li>
             <li><a th:href="@{/login?logout}">Sign Out</a></li>
           </ul>
         </div>
@@ -38,14 +39,12 @@
         <table class="table">
           <thead>
           <tr>
-            <th>ID</th>
             <th>NAME</th>
             <th>SCORE</th>
             <th>DATE</th>
           </tr>
            <!--- <tr th:each="m : ${matchs}"  class='clickable-row' th:href="  window.open('@{match(id=${m.id})}','_blank')" > -->
             <tr th:each="m : ${matches}"  class='clickable-row'>  
-            <td th:text="${m.id}">id</td>
             <td th:text="${m.name}">name</td>
             <td th:text="${m.score}">score</td>
             <td th:text="${m.date}">date</td>
