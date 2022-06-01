@@ -46,6 +46,16 @@ public class PlayerService
     public List<Player> orderByNameDESC(){
         return playerRepository.orderByNameDESC();
     }
+    public void addGoal(String name){
+        playerRepository.addGoal(name);
+    }
+    public void addYellowCard(String name){
+        playerRepository.addYellow(name);
+    }
+    public void addRedCard(String name){
+        playerRepository.addRed(name);
+    }
+
 
 
 }    

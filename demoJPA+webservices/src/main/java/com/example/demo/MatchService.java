@@ -30,4 +30,10 @@ public class MatchService
     public Optional<Match> getMatch(int id) {
         return MatchRepository.findById(id);
     }
-}    
+    public void updateStatus(int id,int status){
+        MatchRepository.updateStatus(id,status);
+    }
+    public void removeMatch(int id){
+        MatchRepository.deleteMatch(id);;
+    }
+}   

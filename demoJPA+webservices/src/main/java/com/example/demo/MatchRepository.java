@@ -14,8 +14,8 @@ public interface MatchRepository extends CrudRepository <Match, Integer> {
     Optional<Match> findByNameEndsWith(String Name);
 
     @Modifying
-    @Query("delete Match m where m.name like :name")
-    void deleteMatch(String name);
+    @Query("delete Match m where m.name like :id")
+    void deleteMatch(int id);
 
     @Transactional
     @Modifying
@@ -29,7 +29,7 @@ public interface MatchRepository extends CrudRepository <Match, Integer> {
 
     @Transactional
     @Modifying
-    @Query("update Match m set m.status = 1 where id = :id")
-    void updateStatus(int id);
+    @Query("update Match m set m.status = :status where id = :id")
+    void updateStatus(int id,int status);
 
 }    

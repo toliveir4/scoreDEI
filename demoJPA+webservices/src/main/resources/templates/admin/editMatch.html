@@ -1,0 +1,15 @@
+<form th:action="@{/admin/saveMatch{match.id}}" th:object="${match}" method="post">
+    <div>
+    <label>Name</label>
+    <input type="text" th:field="*{name}">
+    </div>
+    <div>
+        <label>Date</label>
+        <input type="datetime" th:field="*{date}">
+    </div>
+    <div>
+        <label>Score</label>
+        <input type="text" th:field="*{score}">
+    </div>
+    <button type="submit">Edit Match!</button>
+</form>
