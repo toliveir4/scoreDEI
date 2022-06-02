@@ -36,10 +36,28 @@
             </ul>
         </div>
     </nav>
-    <div class="w3-center" style="margin-top: 10%;">
-        <h1 style="font-size: 90px;">Welcome!</h1>
-        <p style="color: black; font-size: 24px;">Click <a th:href="@{/login}">here</a> to Login.</p>
+    <div class=" w3-container" style="margin-top:0.3%;padding: 10% 10%; background-color: var(--bg);">
+        <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>
+    <a th:href="@{/login}">
+    <lord-icon
+    src="https://cdn.lordicon.com/ucvsemjq.json"
+    trigger="loop"
+    delay="800"
+    colors="primary:#ffffff"
+    state="hover"
+    style="width:250px;height:250px;display:inline-block;">
+    </lord-icon>
+    <div class="w3-center" style="display:inline-block"></div>
+        
+        <h1 style="font-size: 90px; text-decoration: none; color:  white;">Welcome!</h1>
+        <p style="color: rgb(14, 120, 166); font-size: 24px;">Click here to Login.</p>
+    
     </div>
+    </a>
 </body>
-
+<style>
+    .a :hover{
+        text-decoration: none;
+    }
+</style>
 </html>
