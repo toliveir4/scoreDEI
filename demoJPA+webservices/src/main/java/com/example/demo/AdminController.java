@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.apache.catalina.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -46,6 +47,8 @@ public class AdminController {
 
     @Autowired
     MatchService matchService;
+    @Autowired
+    MatchRepository matchRepository;
 
     @Autowired
     PlayerService playerService;
@@ -133,11 +136,13 @@ public class AdminController {
         }
 
         Match[] match = {
-                new Match("2-1", "22-12-2020 15:30:00", 1),
-                new Match("2-3", "22-12-2020 12:30:00", 1),
+                new Match("2-1", "22-12-2020 15:30:00", 0),
+                new Match("2-3", "22-12-2020 12:30:00", 0),
         };
         match[0].setName("Liverpool vs Arsenal");
         match[1].setName("Everton vs Leicester");
+        match[0].setHome(a);
+        match[0].setAway(b);
 
         for (Match m : match)
             this.matchService.addMatch(m); 
@@ -146,6 +151,13 @@ public class AdminController {
                 new Event("title1", "info1", "86:02", 1),
                 new Event("title2", "info2", "90:01", 1),
         };
+        Player[] p = {
+            new Player("Salah", "CF", "22-12-1992"),
+            new Player("Diogo Jota", "CF", "22-12-1992"),
+         };
+
+        for (Player e : p)
+        this.playerService.addPlayer(e);
 
         for (Event e : event)
             this.eventService.addEvent(e);
@@ -160,6 +172,7 @@ public class AdminController {
         model.addAttribute("order", "asc");
         return "admin/hello";
     }
+
     
     @GetMapping("/listPlayers")
     //@Secured("ADMIN")
@@ -206,7 +219,7 @@ public class AdminController {
     @GetMapping("/createTeam")
     public String createTeam(Model m) {
         m.addAttribute("team", new Team());
-        return "editTeam";
+        return "admin/editTeam";
     }
 
     private String getEditTeamForm(int id, String formName, Model m) {
@@ -248,7 +261,7 @@ public class AdminController {
             return signUp(m);
         }
 
-        return "redirect:/listUsers";
+        return "redirect:/admin/listUsers";
     }
 
     @GetMapping("/listUsers")
@@ -289,10 +302,28 @@ public class AdminController {
         if (op.isPresent()) {
             m.addAttribute("events", eventRepository.getEventsFromMatch(op.get()));
             m.addAttribute("match", op.get());
-            return "match";
+            return "admin/match";
         } else {
             return "redirect:admin/listMatches";
         }
+    }
+    @GetMapping("/deleteMatch")
+    //@Secured("ADMIN")
+    public String deleteMatch(@RequestParam(name = "id", required = true) int id, Model ml) {
+        Optional<Match> op = this.matchService.getMatch(id);
+        if (op.isPresent()) {
+            this.matchService.removeMatch(id);
+        }
+        return "redirect:/admin/listMatches";
+    }
+    @PostMapping("/changeRole")
+    //@Secured("ADMIN")
+    public String changeRole(@RequestParam(name = "id", required = true) int id, Model ml) {
+        Optional<WebUser> op = this.userService.getUser(id);
+        if (op.isPresent()) {
+            this.userService.updateAdmin(id);
+        }
+        return "redirect:/admin/listUsers";
     }
 
     @GetMapping("/createEvent")
@@ -308,47 +339,100 @@ public class AdminController {
             m.addAttribute("allPlayers", this.playerService.getAllPlayers());
             // saveEvent
             // this.eventService.addEvent(event);
-            return "createEvent";
+            return "/admin/createEvent";
         } else {
-            return "redirect:admin/listMatches";
+            return "redirect:/admin/listMatches";
         }
     }
 
     @GetMapping("/saveEvent")
-    public String saveEvent(@ModelAttribute Event event, Model m) {
+    private String saveEvent(@ModelAttribute Event event, Model m) {
         try {
             event.setTime(new Date());
-            this.eventService.addEvent(event);
+         
             switch(event.getType()){
                 case 1:{
-
                     //inicio do jogo
+                    //System.out.println("aaaaa-a--aaa");
+                   if(this.matchService.getMatch(event.getMatch().getId()).get().getStatus()!=1)
+                         this.matchService.updateStatus(event.getMatch().getId(), 1);
+                    else         
+                        this.matchService.updateStatus(event.getMatch().getId(), 2);
+                    
+
+
+
+                    Match match=this.matchService.getMatch(event.getMatch().getId()).get();
+                    if(match.getStatus()==1)
+                    {
+                        
+                        if(match.getScoreAway()<match.getScoreHome())
+                        {
+                            this.teamRepository.addDefeat(match.getAway().getName());
+                            this.teamRepository.addWin(match.getHome().getName());
+                        }
+                        if(event.getMatch().getScoreAway()>event.getMatch().getScoreHome())
+                        {
+                            this.teamRepository.addDefeat(match.getHome().getName());
+                            this.teamRepository.addWin(match.getAway().getName());
+                        }
+                        if(event.getMatch().getScoreAway()==event.getMatch().getScoreHome())
+                        {
+                            this.teamRepository.addDraw(match.getAway().getName());
+                            this.teamRepository.addDraw(match.getHome().getName());
+                        }
+                    }
+
+                    if(event.getMatch().getStatus()==1)
+                    {
+                        this.teamRepository.addGame(event.getMatch().getAway().getName());
+                        this.teamRepository.addGame(event.getMatch().getHome().getName());
+                    }
                     break;
                 }
                 case 2:{
                      // 
+                     
+                        //adicionar golos ao match 
+                        if(event.getMatch().getStatus()==1){
+                            this.playerService.addGoal(event.getPlayer().getName());
+                        if(event.getMatch().getHome().getId()==event.getTeam().getId()){
+                             this.matchRepository.addHomeGoal(event.getMatch().getId());
+                             this.matchRepository.updateScore(((event.getMatch().getScoreHome()+1)+"-"+event.getMatch().getScoreAway()),event.getMatch().getId());
+                            }
+                             
+                        else{
+                            
+                            this.matchRepository.addAwayGoal(event.getMatch().getId());
+                            this.matchRepository.updateScore((event.getMatch().getScoreHome()+"-"+(event.getMatch().getScoreAway()+1)),event.getMatch().getId());
+                         
+                        }
+                    }
+                        else {
+                            this.matchRepository.deleteById(event.getMatch().getId());
+                        }
+                    
+                      
                     break;}
                 case 3:{
                      // 
+                        this.playerService.addYellowCard(event.getPlayer().getName());
                     break;}
                 case 4:{
-                     // 
+                        this.playerService.addRedCard(event.getPlayer().getName());
                     break;}
                 case 5:{
-                     // 
+                        this.matchService.updateStatus(event.getMatch().getId(), 5);
                     break;}
                 case 6:{
-                     // 
+                       this.matchService.updateStatus(event.getMatch().getId(), 6);
                     break;}
+                    
             }
-            
-
+            this.eventService.addEvent(event);
         } catch (Exception e) {
-            return "redirect:admin/listMatches";
+            return "redirect:/admin/listMatches";
         }
         return "redirect:admin/match?id=" + event.getMatch().getId();
     }
-    
-
-
 }

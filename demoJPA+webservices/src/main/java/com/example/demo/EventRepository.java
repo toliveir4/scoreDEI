@@ -32,7 +32,10 @@ public interface EventRepository extends CrudRepository <Event, Integer> {
     @Query("select e from Event e where e.player = ?1 and e.match = ?2")
     List<Event> getPlayerEventsFromAMatch(Player i,Match m );
 
+    @Transactional
+    @Modifying
     @Query("Delete from Event e where e.id = ?1")
     List<Event> deleteEventById(int id);
+
 
 }    

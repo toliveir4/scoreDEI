@@ -30,5 +30,7 @@ public class EventService
     public Optional<Event> getUser(int id) {
         return eventRepository.findById(id);
     }
-
+    public void deleteEventById(int id){
+        deleteEventById(id);
+    }
 }    

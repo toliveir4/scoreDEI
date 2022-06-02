@@ -206,7 +206,7 @@ public class DataController {
         if (op.isPresent()) {
 
             Match match = op.get();
-            Event event = new Event(match.getName(), "info1", "86:02", 1);
+            Event event = new Event(match.getName(), "info1", "86:02", 0);
             event.setMatch(match);
             m.addAttribute("event", event);
             List<Team> a = new ArrayList<Team>();
@@ -226,38 +226,70 @@ public class DataController {
     private String saveEvent(@ModelAttribute Event event, Model m) {
         try {
             event.setTime(new Date());
-            this.eventService.addEvent(event);
+         
             switch(event.getType()){
                 case 1:{
                     //inicio do jogo
                     //System.out.println("aaaaa-a--aaa");
-                    if(this.matchService.getMatch(event.getMatch().getId()).get().getStatus()!=1){
+                   if(this.matchService.getMatch(event.getMatch().getId()).get().getStatus()!=1)
+                         this.matchService.updateStatus(event.getMatch().getId(), 1);
+                    else         
+                        this.matchService.updateStatus(event.getMatch().getId(), 2);
+                    
+
+
+
+                    Match match=this.matchService.getMatch(event.getMatch().getId()).get();
+                    if(match.getStatus()==1)
+                    {
+                        
+                        if(match.getScoreAway()<match.getScoreHome())
+                        {
+                            this.teamRepository.addDefeat(match.getAway().getName());
+                            this.teamRepository.addWin(match.getHome().getName());
+                        }
+                        if(event.getMatch().getScoreAway()>event.getMatch().getScoreHome())
+                        {
+                            this.teamRepository.addDefeat(match.getHome().getName());
+                            this.teamRepository.addWin(match.getAway().getName());
+                        }
+                        if(event.getMatch().getScoreAway()==event.getMatch().getScoreHome())
+                        {
+                            this.teamRepository.addDraw(match.getAway().getName());
+                            this.teamRepository.addDraw(match.getHome().getName());
+                        }
+                    }
+
+                    if(event.getMatch().getStatus()==1)
+                    {
                         this.teamRepository.addGame(event.getMatch().getAway().getName());
                         this.teamRepository.addGame(event.getMatch().getHome().getName());
-                        this.matchService.updateStatus(event.getMatch().getId(), 1);}
-                    else{
-                        if(event.getMatch().getScoreAway()>event.getMatch().getScoreHome()){
-                            this.teamRepository.addDefeat(event.getMatch().getHome().getName());
-                            this.teamRepository.addWin(event.getMatch().getHome().getName());}
-                        else if(event.getMatch().getScoreAway()>event.getMatch().getScoreHome()){
-                            this.teamRepository.addDefeat(event.getMatch().getAway().getName());
-                            this.teamRepository.addWin(event.getMatch().getHome().getName());}
-                        else{
-                            this.teamRepository.addDraw(event.getMatch().getAway().getName());
-                            this.teamRepository.addDraw(event.getMatch().getHome().getName());}
-                    
-                        this.matchService.updateStatus(event.getMatch().getId(), 2);}
+                    }
                     break;
                 }
                 case 2:{
                      // 
-                        this.playerService.addGoal(event.getPlayer().getName());
+                     
                         //adicionar golos ao match 
-                        if(event.getMatch().getHome().getId()==event.getTeam().getId())
-                             this.matchRepository.addHomeGoal(event.getId());
-                        else
-                            this.matchRepository.addAwayGoal(event.getId());
-                            this.matchRepository.updateScore((event.getMatch().getScoreHome()+"-"+event.getMatch().getScoreAway()));
+                        if(event.getMatch().getStatus()==1){
+                            this.playerService.addGoal(event.getPlayer().getName());
+                        if(event.getMatch().getHome().getId()==event.getTeam().getId()){
+                             this.matchRepository.addHomeGoal(event.getMatch().getId());
+                             this.matchRepository.updateScore(((event.getMatch().getScoreHome()+1)+"-"+event.getMatch().getScoreAway()),event.getMatch().getId());
+                            }
+                             
+                        else{
+                            
+                            this.matchRepository.addAwayGoal(event.getMatch().getId());
+                            this.matchRepository.updateScore((event.getMatch().getScoreHome()+"-"+(event.getMatch().getScoreAway()+1)),event.getMatch().getId());
+                         
+                        }
+                    }
+                        else {
+                            this.matchRepository.deleteById(event.getMatch().getId());
+                        }
+                    
+                      
                     break;}
                 case 3:{
                      // 
@@ -272,8 +304,9 @@ public class DataController {
                 case 6:{
                        this.matchService.updateStatus(event.getMatch().getId(), 6);
                     break;}
+                    
             }
-            
+            this.eventService.addEvent(event);
         } catch (Exception e) {
             return "redirect:/listMatches";
         }

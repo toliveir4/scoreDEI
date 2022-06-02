@@ -12,9 +12,10 @@ import com.example.data.Match;
 public interface MatchRepository extends CrudRepository <Match, Integer> {
     @Query("select m from Match m where m.name like %?1")
     Optional<Match> findByNameEndsWith(String Name);
-
+    
+    @Transactional
     @Modifying
-    @Query("delete Match m where m.name like :id")
+    @Query("delete Match m where m.id = ?1")
     void deleteMatch(int id);
 
     @Transactional

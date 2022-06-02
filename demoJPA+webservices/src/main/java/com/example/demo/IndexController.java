@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+    /*@Controller
 public class IndexController implements ErrorController{
 
-    private static final String PATH = "/error";
+private static final String PATH = "/error";
     
     @RequestMapping(value = PATH)
     public String error() {
         return "redirect:/hello";
     }
 
-}
+}*/

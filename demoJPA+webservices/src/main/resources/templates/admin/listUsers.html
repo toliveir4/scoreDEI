@@ -60,9 +60,18 @@
       <td th:text="${u.username}">username</td>
       <td th:text="${u.password}">password</td>
       <td th:text="${u.email}">email</td>
-      <td th:text="${u.admin}">admin</td>
+      <td th:text="${u.admin}">admin 
+      </td>
+      <!--<td>
+      <form th:action="@{changeRole(id=${u.id})}" method="POST">
+        <input class="btn btn-primary"  type="submit" value=" Change Role" />
+      </form>-->
+    </td>
     </tr>
   </table>
+  <form th:action="@{/admin/createUser}"  class="w3-center">
+    <input class="btn btn-primary" type="submit" value=" + Create User" />
+</form>
 
 </body>
 

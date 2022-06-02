@@ -44,5 +44,7 @@ public class WebUserService
     public Optional<WebUser> getUser(int id) {
         return userRepository.findById(id);
     }
-
+    public void updateAdmin(int id){
+        userRepository.updateAdmin(id);
+    }
 }    
