@@ -233,13 +233,13 @@ public class AdminController {
 
     @GetMapping("/editTeam")
     public String editTeam(@RequestParam(name = "id", required = true) int id, Model m) {
-        return getEditTeamForm(id, "editTeam", m);
+        return getEditTeamForm(id, "admin/editTeam", m);
     }
 
     @PostMapping("/saveTeam")
     public String saveTeam(@ModelAttribute Team t) {
         this.teamService.addTeam(t);
-        return "redirect:/listTeams";
+        return "redirect:/admin/listTeams";
     }
 
    
