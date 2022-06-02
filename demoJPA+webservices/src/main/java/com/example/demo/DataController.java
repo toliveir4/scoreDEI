@@ -40,10 +40,8 @@ public class DataController {
     @Autowired
     TeamRepository teamRepository;
 
-
     @Autowired
     MatchRepository matchRepository;
-    
 
     @Autowired
     MatchService matchService;
@@ -229,85 +227,79 @@ public class DataController {
     private String saveEvent(@ModelAttribute Event event, Model m) {
         try {
             event.setTime(new Date());
-         
-            switch(event.getType()){
-                case 1:{
-                    //inicio do jogo
-                    //System.out.println("aaaaa-a--aaa");
-                   if(this.matchService.getMatch(event.getMatch().getId()).get().getStatus()!=1)
-                         this.matchService.updateStatus(event.getMatch().getId(), 1);
-                    else         
+
+            switch (event.getType()) {
+                case 1: {
+                    // inicio do jogo
+                    // System.out.println("aaaaa-a--aaa");
+                    if (this.matchService.getMatch(event.getMatch().getId()).get().getStatus() != 1)
+                        this.matchService.updateStatus(event.getMatch().getId(), 1);
+                    else
                         this.matchService.updateStatus(event.getMatch().getId(), 2);
-                    
 
+                    Match match = this.matchService.getMatch(event.getMatch().getId()).get();
+                    if (match.getStatus() == 1) {
 
-
-                    Match match=this.matchService.getMatch(event.getMatch().getId()).get();
-                    if(match.getStatus()==1)
-                    {
-                        
-                        if(match.getScoreAway()<match.getScoreHome())
-                        {
+                        if (match.getScoreAway() < match.getScoreHome()) {
                             this.teamRepository.addDefeat(match.getAway().getName());
                             this.teamRepository.addWin(match.getHome().getName());
                         }
-                        if(event.getMatch().getScoreAway()>event.getMatch().getScoreHome())
-                        {
+                        if (event.getMatch().getScoreAway() > event.getMatch().getScoreHome()) {
                             this.teamRepository.addDefeat(match.getHome().getName());
                             this.teamRepository.addWin(match.getAway().getName());
                         }
-                        if(event.getMatch().getScoreAway()==event.getMatch().getScoreHome())
-                        {
+                        if (event.getMatch().getScoreAway() == event.getMatch().getScoreHome()) {
                             this.teamRepository.addDraw(match.getAway().getName());
                             this.teamRepository.addDraw(match.getHome().getName());
                         }
                     }
 
-                    if(event.getMatch().getStatus()==1)
-                    {
+                    if (event.getMatch().getStatus() == 1) {
                         this.teamRepository.addGame(event.getMatch().getAway().getName());
                         this.teamRepository.addGame(event.getMatch().getHome().getName());
                     }
                     break;
                 }
-                case 2:{
-                     // 
-                     
-                        //adicionar golos ao match 
-                        if(event.getMatch().getStatus()==1){
-                            this.playerService.addGoal(event.getPlayer().getName());
-                        if(event.getMatch().getHome().getId()==event.getTeam().getId()){
-                             this.matchRepository.addHomeGoal(event.getMatch().getId());
-                             this.matchRepository.updateScore(((event.getMatch().getScoreHome()+1)+"-"+event.getMatch().getScoreAway()),event.getMatch().getId());
-                            }
-                             
-                        else{
-                            
+                case 2: {
+                    //
+                    // adicionar golos ao match
+                    if (event.getMatch().getStatus() == 1) {
+                        this.playerService.addGoal(event.getPlayer().getName());
+                        if (event.getMatch().getHome().getId() == event.getTeam().getId()) {
+                            this.matchRepository.addHomeGoal(event.getMatch().getId());
+                            this.matchRepository.updateScore(
+                                    ((event.getMatch().getScoreHome() + 1) + "-" + event.getMatch().getScoreAway()),
+                                    event.getMatch().getId());
+                        } else {
+
                             this.matchRepository.addAwayGoal(event.getMatch().getId());
-                            this.matchRepository.updateScore((event.getMatch().getScoreHome()+"-"+(event.getMatch().getScoreAway()+1)),event.getMatch().getId());
-                         
+                            this.matchRepository.updateScore(
+                                    (event.getMatch().getScoreHome() + "-" + (event.getMatch().getScoreAway() + 1)),
+                                    event.getMatch().getId());
                         }
+                    } else {
+                        this.matchRepository.deleteById(event.getMatch().getId());
                     }
-                        else {
-                            this.matchRepository.deleteById(event.getMatch().getId());
-                        }
-                    
-                      
-                    break;}
-                case 3:{
-                     // 
-                        this.playerService.addYellowCard(event.getPlayer().getName());
-                    break;}
-                case 4:{
-                        this.playerService.addRedCard(event.getPlayer().getName());
-                    break;}
-                case 5:{
-                        this.matchService.updateStatus(event.getMatch().getId(), 5);
-                    break;}
-                case 6:{
-                       this.matchService.updateStatus(event.getMatch().getId(), 6);
-                    break;}
-                    
+                    break;
+                }
+                case 3: {
+                    //
+                    this.playerService.addYellowCard(event.getPlayer().getName());
+                    break;
+                }
+                case 4: {
+                    this.playerService.addRedCard(event.getPlayer().getName());
+                    break;
+                }
+                case 5: {
+                    this.matchService.updateStatus(event.getMatch().getId(), 5);
+                    break;
+                }
+                case 6: {
+                    this.matchService.updateStatus(event.getMatch().getId(), 6);
+                    break;
+                }
+
             }
             this.eventService.addEvent(event);
         } catch (Exception e) {

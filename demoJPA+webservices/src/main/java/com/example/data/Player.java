@@ -40,7 +40,7 @@ public class Player {
     public Player(String name, String position, String birthday) {
         this.name = name;
         this.position = position;
-        SimpleDateFormat dt = new SimpleDateFormat("dd-mm-yyyy");
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
         Date date;
         try {
             date = dt.parse(birthday);
@@ -59,12 +59,12 @@ public class Player {
     }
 
     public String getBirthday() {
-        SimpleDateFormat d = new SimpleDateFormat("dd-mm-yyyy");
+        SimpleDateFormat d = new SimpleDateFormat("yyyy-mm-dd");
         return d.format(birthday);
     }
 
     public void setBirthday(String birthday) {
-        SimpleDateFormat dt = new SimpleDateFormat("dd-mm-yyyy");
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-mm-dd");
         Date date;
         try {
             date = dt.parse(birthday);

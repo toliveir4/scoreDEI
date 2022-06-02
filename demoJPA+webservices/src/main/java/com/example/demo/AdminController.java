@@ -65,7 +65,6 @@ public class AdminController {
     @Autowired
     WebSecurityConfig securityService;
 
-
     private final static Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @GetMapping("/admin/loadData")
@@ -87,7 +86,7 @@ public class AdminController {
         ArrayList<JSONObject> arrays = new ArrayList<JSONObject>();
         for (int i = 0; i < playersBody.length(); i++)
             arrays.add(playersBody.getJSONObject(i));
-        
+
         for (int p = 0; p < arrays.size(); p++) {
             String name = arrays.get(p).getJSONObject("player").getString("name");
             String birth = arrays.get(p).getJSONObject("player").getJSONObject("birth").optString("date", "2001-10-14");
@@ -95,27 +94,31 @@ public class AdminController {
             ArrayList<JSONObject> arr = new ArrayList<JSONObject>();
             arr.add(pArr.getJSONObject(0));
 
-            
-            Team tt = new Team(arr.get(0).getJSONObject("team").getString("name"), 
+            Team tt = new Team(arr.get(0).getJSONObject("team").getString("name"),
                     arr.get(0).getJSONObject("team").getString("logo"));
-            
+
             Team check = this.teamService.findByName(tt.getName());
 
             if (check == null)
                 this.teamService.addTeam(tt);
-            else tt = check;
+            else
+                tt = check;
 
             String position = arr.get(0).getJSONObject("games").getString("position");
-            
+
             Player newP = new Player(name, position, birth);
             this.playerService.addPlayer(newP);
             newP.setTeam(tt);
         }
 
-        Team a = new Team("Liverpool", "a.png");
-        Team b = new Team("Arsenal", "b.png");
+        Team a = new Team("Fulham", "a.png");
+        Team b = new Team("Stoke City", "b.png");
+        Team c = new Team("Manchester United", "c.png");
+        Team d = new Team("Leicester", "d.png");
         this.teamService.addTeam(a);
         this.teamService.addTeam(b);
+        this.teamService.addTeam(c);
+        this.teamService.addTeam(d);
 
         // TODO isto vai saltar fora, apenas está a servir como ajuda
         WebUser[] users = {
@@ -139,32 +142,35 @@ public class AdminController {
                 new Match("2-1", "22-12-2020 15:30:00", 0),
                 new Match("2-3", "22-12-2020 12:30:00", 0),
         };
-        match[0].setName("Liverpool vs Arsenal");
-        match[1].setName("Everton vs Leicester");
+        match[0].setName(a.getName() + " vs " + b.getName());
+        match[1].setName("Manchester United vs Leicester");
         match[0].setHome(a);
         match[0].setAway(b);
+        match[1].setHome(c);
+        match[1].setAway(d);
 
         for (Match m : match)
-            this.matchService.addMatch(m); 
+            this.matchService.addMatch(m);
 
         Event[] event = {
                 new Event("title1", "info1", "86:02", 1),
                 new Event("title2", "info2", "90:01", 1),
         };
         Player[] p = {
-            new Player("Salah", "CF", "22-12-1992"),
-            new Player("Diogo Jota", "CF", "22-12-1992"),
-         };
-         p[0].setTeam(a);
+                new Player("Salah", "CF", "1992-12-22"),
+                new Player("Diogo Jota", "CF", "1992-12-22"),
+        };
+        p[0].setTeam(a);
+        p[1].setTeam(b);
         for (Player e : p)
-        this.playerService.addPlayer(e);
+            this.playerService.addPlayer(e);
 
         for (Event e : event)
             this.eventService.addEvent(e);
 
         return "redirect:/admin/listPlayers";
     }
-  
+
     @GetMapping("hello")
     public String hello(Model model) {
         model.addAttribute("players", this.playerService.getAllPlayers());
@@ -173,19 +179,19 @@ public class AdminController {
         return "admin/hello";
     }
 
-    
     @GetMapping("/listPlayers")
-    //@Secured("ADMIN")
+    // @Secured("ADMIN")
     public String listPlayers(Model model) {
         model.addAttribute("players", this.playerService.getAllPlayers());
         model.addAttribute("field", "name");
         model.addAttribute("order", "asc");
         return "admin/listPlayers";
     }
+
     @GetMapping("/listTeams")
     public String listTeams(Model m,
-    @RequestParam(name = "field", required = false) String field,
-    @RequestParam(name = "order", required = false, defaultValue = "asc") String order) {
+            @RequestParam(name = "field", required = false) String field,
+            @RequestParam(name = "order", required = false, defaultValue = "asc") String order) {
 
         if (field == null) {
             m.addAttribute("teams", this.teamService.getAllTeams());
@@ -242,8 +248,6 @@ public class AdminController {
         return "redirect:/admin/listTeams";
     }
 
-   
-
     @GetMapping("/createUser")
     private String signUp(Model m) {
         m.addAttribute("web_user", new WebUser());
@@ -254,7 +258,7 @@ public class AdminController {
     private String saveUser(@ModelAttribute @Valid WebUser u, Model m) {
         try {
             userService.addUser(u);
-            securityService.userDetailsService(u.getUsername(), u.getPassword(),u.getAdmin());
+            securityService.userDetailsService(u.getUsername(), u.getPassword(), u.getAdmin());
 
         } catch (Exception e) {
             m.addAttribute("error", "Username taken!");
@@ -307,8 +311,9 @@ public class AdminController {
             return "redirect:admin/listMatches";
         }
     }
+
     @GetMapping("/deleteMatch")
-    //@Secured("ADMIN")
+    // @Secured("ADMIN")
     public String deleteMatch(@RequestParam(name = "id", required = true) int id, Model ml) {
         Optional<Match> op = this.matchService.getMatch(id);
         if (op.isPresent()) {
@@ -316,8 +321,9 @@ public class AdminController {
         }
         return "redirect:/admin/listMatches";
     }
+
     @PostMapping("/changeRole")
-    //@Secured("ADMIN")
+    // @Secured("ADMIN")
     public String changeRole(@RequestParam(name = "id", required = true) int id, Model ml) {
         Optional<WebUser> op = this.userService.getUser(id);
         if (op.isPresent()) {
@@ -333,7 +339,7 @@ public class AdminController {
 
             Match match = op.get();
             Event event = new Event(match.getName(), "info1", "86:02", 1);
-            event.setMatch(match); 
+            event.setMatch(match);
             m.addAttribute("event", event);
             List<Team> a = new ArrayList<Team>();
             a.add(this.teamService.getTeam(match.getHome().getId()).get());
@@ -343,7 +349,7 @@ public class AdminController {
             p.addAll(this.playerService.selectPlayersByTeam(match.getAway().getId()));
             p.addAll(this.playerService.selectPlayersByTeam(match.getHome().getId()));
             m.addAttribute("allPlayers", p);
-           
+
             // saveEvent
             // this.eventService.addEvent(event);
             return "/admin/createEvent";
@@ -356,85 +362,80 @@ public class AdminController {
     private String saveEvent(@ModelAttribute Event event, Model m) {
         try {
             event.setTime(new Date());
-         
-            switch(event.getType()){
-                case 1:{
-                    //inicio do jogo
-                    //System.out.println("aaaaa-a--aaa");
-                   if(this.matchService.getMatch(event.getMatch().getId()).get().getStatus()!=1)
-                         this.matchService.updateStatus(event.getMatch().getId(), 1);
-                    else         
+
+            switch (event.getType()) {
+                case 1: {
+                    // inicio do jogo
+                    // System.out.println("aaaaa-a--aaa");
+                    if (this.matchService.getMatch(event.getMatch().getId()).get().getStatus() != 1)
+                        this.matchService.updateStatus(event.getMatch().getId(), 1);
+                    else
                         this.matchService.updateStatus(event.getMatch().getId(), 2);
-                    
 
-
-
-                    Match match=this.matchService.getMatch(event.getMatch().getId()).get();
-                    if(match.getStatus()==1)
-                    {
-                        
-                        if(match.getScoreAway()<match.getScoreHome())
-                        {
+                    Match match = this.matchService.getMatch(event.getMatch().getId()).get();
+                    if (match.getStatus() == 1) {
+                        if (match.getScoreAway() < match.getScoreHome()) {
                             this.teamRepository.addDefeat(match.getAway().getName());
                             this.teamRepository.addWin(match.getHome().getName());
                         }
-                        if(event.getMatch().getScoreAway()>event.getMatch().getScoreHome())
-                        {
+                        if (event.getMatch().getScoreAway() > event.getMatch().getScoreHome()) {
                             this.teamRepository.addDefeat(match.getHome().getName());
                             this.teamRepository.addWin(match.getAway().getName());
                         }
-                        if(event.getMatch().getScoreAway()==event.getMatch().getScoreHome())
-                        {
+                        if (event.getMatch().getScoreAway() == event.getMatch().getScoreHome()) {
                             this.teamRepository.addDraw(match.getAway().getName());
                             this.teamRepository.addDraw(match.getHome().getName());
                         }
                     }
 
-                    if(event.getMatch().getStatus()==1)
-                    {
+                    if (event.getMatch().getStatus() == 1) {
                         this.teamRepository.addGame(event.getMatch().getAway().getName());
                         this.teamRepository.addGame(event.getMatch().getHome().getName());
                     }
                     break;
                 }
-                case 2:{
-                     // 
-                     
-                        //adicionar golos ao match 
-                        if(event.getMatch().getStatus()==1){
-                            this.playerService.addGoal(event.getPlayer().getName());
-                        if(event.getMatch().getHome().getId()==event.getTeam().getId()){
-                             this.matchRepository.addHomeGoal(event.getMatch().getId());
-                             this.matchRepository.updateScore(((event.getMatch().getScoreHome()+1)+"-"+event.getMatch().getScoreAway()),event.getMatch().getId());
-                            }
-                             
-                        else{
-                            
-                            this.matchRepository.addAwayGoal(event.getMatch().getId());
-                            this.matchRepository.updateScore((event.getMatch().getScoreHome()+"-"+(event.getMatch().getScoreAway()+1)),event.getMatch().getId());
-                         
+                case 2: {
+                    // adicionar golos ao match
+                    if (event.getMatch().getStatus() == 1) {
+                        this.playerService.addGoal(event.getPlayer().getName());
+                        if (event.getMatch().getHome().getId() == event.getTeam().getId()) {
+                            this.matchRepository.addHomeGoal(event.getMatch().getId());
+                            this.matchRepository.updateScore(
+                                    ((event.getMatch().getScoreHome() + 1) + "-" + event.getMatch().getScoreAway()),
+                                    event.getMatch().getId());
                         }
-                    }
+
                         else {
-                            this.matchRepository.deleteById(event.getMatch().getId());
+
+                            this.matchRepository.addAwayGoal(event.getMatch().getId());
+                            this.matchRepository.updateScore(
+                                    (event.getMatch().getScoreHome() + "-" + (event.getMatch().getScoreAway() + 1)),
+                                    event.getMatch().getId());
                         }
-                    
-                      
-                    break;}
-                case 3:{
-                     // 
-                        this.playerService.addYellowCard(event.getPlayer().getName());
-                    break;}
-                case 4:{
-                        this.playerService.addRedCard(event.getPlayer().getName());
-                    break;}
-                case 5:{
-                        this.matchService.updateStatus(event.getMatch().getId(), 5);
-                    break;}
-                case 6:{
-                       this.matchService.updateStatus(event.getMatch().getId(), 6);
-                    break;}
-                    
+                    } else {
+                        this.matchRepository.deleteById(event.getMatch().getId());
+                    }
+
+                    break;
+                }
+                case 3: {
+                    //
+                    this.playerService.addYellowCard(event.getPlayer().getName());
+                    break;
+                }
+                case 4: {
+                    this.playerService.addRedCard(event.getPlayer().getName());
+                    break;
+                }
+                case 5: {
+                    this.matchService.updateStatus(event.getMatch().getId(), 5);
+                    break;
+                }
+                case 6: {
+                    this.matchService.updateStatus(event.getMatch().getId(), 6);
+                    break;
+                }
+
             }
             this.eventService.addEvent(event);
         } catch (Exception e) {
