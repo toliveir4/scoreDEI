@@ -32,12 +32,13 @@
             </a>
         </div>
     </nav>
-    <div class="w3-center" style="margin-top: 10%; margin-left:35%; margin-right: 35%; padding-bottom: 2%; background-color: rgb(194, 232, 231); padding-top: 2%; border-radius: 5%; box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.14);">
+    <div class="w3-center w3-text-white" style="margin-top: 10%; margin-left:35%; margin-right: 35%; padding-bottom: 2%; background-color: var(--bg); padding-top: 2%; border-radius: 5%; box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.14);">
+        <h2>Login</h2>
         <strong>
             <div th:if="${param.error}" style="color: red; font-size: 20px;">
                 Invalid username and password
             </div>
-            <div th:if="${param.logout}" style="color: black; font-size: 20px;">
+            <div th:if="${param.logout}" style="color: white; font-size: 20px;">
                 You have been logged out
             </div>
         </strong>
@@ -51,12 +52,12 @@
             </div>
             <!-- <div class="mb-3" ><input  class="btn btn-primary" type="submit" value="Sign In" style="padding: 1% 8%"/></div> -->
             <div class="mb-3" style="margin-top: 25px">
-                <input class="btn btn-success" type="submit" value="Sign In" style="padding: 1% 8%; background-color: #008fb7; border-color: #008fb7;" />
+                <input class="btn btn-success" type="submit" value="Sign In" style="padding: 1% 8%; background-color: transparent; border-color: white;" />
             </div>
         </form>
         <br>
         <div class="w3-center">
-            <a th:href="@{/signup}" style="font-size: 14px;">Sign Up here</a>
+            <a th:href="@{/signup}" style="font-size: 14px;color: white;">Sign Up here</a>
         </div>
     </div>
 

@@ -72,10 +72,14 @@
         <td th:text="${m.date}">date</td>
         <td><a th:href="@{/admin/match(id=${m.id})}">More</a></td>
         <td ><a th:href="@{deleteMatch(id=${m.id})}" style="color:rgb(184, 0, 0) ;">Delete</a></td>
+        
       </tr>
 
     </thead>
   </table>
+  <form th:action="@{/createMatch}"  class="w3-center">
+    <input class="btn btn-primary" type="submit" value=" + Create Match" />
+</form>
 
 </body>
 <style>

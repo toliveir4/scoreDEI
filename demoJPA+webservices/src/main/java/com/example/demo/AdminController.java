@@ -75,7 +75,7 @@ public class AdminController {
         String URL = "https://v3.football.api-sports.io/";
         // Premier League 2021
         String ENDPOINT = "players?league=39&season=2021";
-        String API_KEY = "6dbe15bb3475e04f108b39b89b365672";
+        String API_KEY = "5deb31ca54b913d651d5813bdca3b30b";
 
         HttpResponse<JsonNode> responsePlayers = Unirest.get(URL + ENDPOINT)
                 .header("x-rapidapi-key", API_KEY)
