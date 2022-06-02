@@ -55,7 +55,7 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
     @Query("select p from Player p order by p.goals desc")
     List<Player> orderByGoalsDESC();
 
-    @Query("select p from Player p where p.team.name = :t")
-    List<Player> selectPlayersByTeam(String t);
+    @Query("select p from Player p where p.team.id = ?1")
+    List<Player> selectPlayersByTeam(int t);
 
 }    

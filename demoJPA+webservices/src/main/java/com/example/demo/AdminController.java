@@ -155,7 +155,7 @@ public class AdminController {
             new Player("Salah", "CF", "22-12-1992"),
             new Player("Diogo Jota", "CF", "22-12-1992"),
          };
-
+         p[0].setTeam(a);
         for (Player e : p)
         this.playerService.addPlayer(e);
 
@@ -333,10 +333,17 @@ public class AdminController {
 
             Match match = op.get();
             Event event = new Event(match.getName(), "info1", "86:02", 1);
-            event.setMatch(match);
+            event.setMatch(match); 
             m.addAttribute("event", event);
-            m.addAttribute("allTeams", this.teamService.getAllTeams());
-            m.addAttribute("allPlayers", this.playerService.getAllPlayers());
+            List<Team> a = new ArrayList<Team>();
+            a.add(this.teamService.getTeam(match.getHome().getId()).get());
+            a.add(this.teamService.getTeam(match.getAway().getId()).get());
+            m.addAttribute("allTeams", a);
+            List<Player> p = new ArrayList<Player>();
+            p.addAll(this.playerService.selectPlayersByTeam(match.getAway().getId()));
+            p.addAll(this.playerService.selectPlayersByTeam(match.getHome().getId()));
+            m.addAttribute("allPlayers", p);
+           
             // saveEvent
             // this.eventService.addEvent(event);
             return "/admin/createEvent";

@@ -55,6 +55,9 @@ public class PlayerService
     public void addRedCard(String name){
         playerRepository.addRed(name);
     }
+    public List<Player> selectPlayersByTeam(int t){
+        return playerRepository.selectPlayersByTeam(t);
+    }
 
 
 

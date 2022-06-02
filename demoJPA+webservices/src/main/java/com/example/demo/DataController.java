@@ -213,7 +213,10 @@ public class DataController {
             a.add(this.teamService.getTeam(match.getHome().getId()).get());
             a.add(this.teamService.getTeam(match.getAway().getId()).get());
             m.addAttribute("allTeams", a);
-            m.addAttribute("allPlayers", this.playerService.getAllPlayers());
+            List<Player> p = new ArrayList<Player>();
+            p.addAll(this.playerService.selectPlayersByTeam(match.getAway().getId()));
+            p.addAll(this.playerService.selectPlayersByTeam(match.getHome().getId()));
+            m.addAttribute("allPlayers", p);
             // saveEvent
             // this.eventService.addEvent(event);
             return "createEvent";
