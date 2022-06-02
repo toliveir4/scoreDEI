@@ -49,7 +49,9 @@
   <table class="table">
     <thead>
       <tr>
+        <th>    </th>
         <th>NAME</th>
+      
         <th><a th:href="@{'/listTeams?field=games&order=' + ${order}}">GAMES</a></th>
         <th><a th:href="@{'/listTeams?field=wins&order=' + ${order}}">WINS</a></th>
         <th><a th:href="@{'/listTeams?field=draws&order=' + ${order}}">DRAWS</a></th>
@@ -57,15 +59,20 @@
         <th>BEST SCORER</th>
       </tr>
       <tr th:each="t : ${teams}">
-        <td th:text="${t.name}">name</td>
-        <td th:text="${t.games}">games</td>
-        <td th:text="${t.wins}">wins</td>
-        <td th:text="${t.draws}">draws</td>
-        <td th:text="${t.defeats}">defeats</td>
-        <td th:text="${t.bestScorer}">best_scorer</td>
+        <th><img th:src="${t.logo}" width="50" height="50"> </th>
+        <td th:text="${t.name}" style="padding-bottom: 20px";>name</td>
+        <td th:text="${t.games}"  style="padding-bottom: 20px">games</td>
+        <td th:text="${t.wins}"  style="padding-bottom: 20px">wins</td>
+        <td th:text="${t.draws}" style="padding-bottom: 20px">draws</td>
+        <td th:text="${t.defeats}" style="padding-bottom: 20px">defeats</td>
+        <td th:text="${t.bestScorer}" style="padding-bottom: 20px">best_scorer</td>
       </tr>
     </thead>
   </table>
+  <div th:each="t : ${teams}">
+   
+  </div>
+ 
 
 </body>
 
