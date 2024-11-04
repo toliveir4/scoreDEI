@@ -1,15 +1,17 @@
-# ------------------------------ scoreDEI ------------------------------
+# —————————— scoreDEI ——————————
 
-## Pré requisitos para o bom funcionamento do scoreDEI:
-    - Instalar o Docker Desktop;
-    - Ter um browser instalado;
-    - Software adequado para visualizar e editar ficheiros ".java" e ".html", entre outros, tais como o Visual Studio Code.
+Prerequisites for scoreDEI to function correctly:
 
-## Guia de instalação da plataforma scoreDEI:
-    - Abrir o Docker Desktop;
-    - Abrir o Visual Studio Code, ou outro IDE, na pasta do código fonte (pasta scoreDEI). 
-    - Após o container carregar completamente irá aparecer um pop-up onde irá dizer "Reabrir no Container";
-    - Na consola aberta pelo container, fazer "cd demoJPA+webservices" para ir para a pasta com o executável do Maven;
-    - Correr o comando "./mvnw spring-boot:run";
-    - Em caso de erro apagar a pasta target, que está localizada dentro da pasta demoJPA+webservices e voltar a correr o comando anterior.
-    - Abrir num browser o link "http://localhost:8080/".
+	•	Install Docker Desktop;
+	•	Have a browser installed;
+	•	Appropriate software to view and edit “.java” and “.html” files, such as Visual Studio Code.
+
+scoreDEI Platform Installation Guide:
+
+	•	Open Docker Desktop;
+	•	Open Visual Studio Code, or another IDE, in the source code folder (scoreDEI folder).
+	•	Once the container loads completely, a pop-up will appear with the option “Reopen in Container”;
+	•	In the console opened by the container, navigate to the folder with the Maven executable by running cd demoJPA+webservices;
+	•	Run the command ./mvnw spring-boot:run;
+	•	If an error occurs, delete the target folder inside the demoJPA+webservices folder and rerun the previous command.
+	•	Open the link “http://localhost:8080/” in a browser.
